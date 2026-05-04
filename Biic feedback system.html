@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIIC Feedback Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0a1628;--navy-mid:#152440;--navy-light:#1e3356;
+    --gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:#7a5f25;
+    --cream:#f5f0e8;--cream-mid:#ede5d4;--cream-dark:#d4c9b2;
+    --text-dark:#0a1628;--text-muted:#4a5568;--text-light:#718096;
+    --white:#ffffff;--success:#2d6a4f;--success-bg:#d8f3dc;
+    --error:#9b2226;--error-bg:#f8d7da;
+    --shadow:0 4px 24px rgba(10,22,40,.10);--shadow-lg:0 8px 48px rgba(10,22,40,.18);
+    --radius:12px;--radius-sm:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);min-height:100vh;font-size:15px;line-height:1.6;}
+  .view{display:none;min-height:100vh;}
+  .view.active{display:flex;flex-direction:column;}
+
+  /* HEADER */
+  .site-header{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;}
+  .logo{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .logo-mark{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:16px;color:var(--navy);}
+  .logo-text{font-size:17px;font-weight:600;color:var(--white);letter-spacing:.4px;}
+  .logo-text span{color:var(--gold);}
+  .header-nav{display:flex;align-items:center;gap:8px;}
+  .nav-btn{background:none;border:1px solid rgba(201,168,76,.35);color:var(--cream);padding:7px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;cursor:pointer;transition:all .2s;}
+  .nav-btn:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+  .nav-btn.primary{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:500;}
+  .user-chip{display:flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);border-radius:100px;padding:5px 14px 5px 8px;}
+  .user-avatar{width:26px;height:26px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--navy);}
+  .user-chip span{font-size:13px;color:var(--cream);}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,var(--navy-light) 100%);padding:80px 2rem 72px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(201,168,76,.08) 0%,transparent 60%);pointer-events:none;}
+  .hero-tag{display:inline-block;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(32px,5vw,52px);font-weight:400;color:var(--white);line-height:1.15;margin-bottom:16px;}
+  .hero h1 em{color:var(--gold);font-style:italic;}
+  .hero p{color:rgba(245,240,232,.65);font-size:17px;max-width:520px;margin:0 auto 36px;}
+  .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;border:none;transition:all .2s;}
+  .btn-primary{background:var(--gold);color:var(--navy);}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(245,240,232,.3);}
+  .btn-outline:hover{background:rgba(245,240,232,.08);}
+
+  /* INFO STRIP */
+  .info-strip{background:var(--white);display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--cream-mid);}
+  .info-item{padding:28px 24px;text-align:center;border-right:1px solid var(--cream-mid);}
+  .info-item:last-child{border-right:none;}
+  .info-icon{width:44px;height:44px;margin:0 auto 12px;background:var(--cream);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+  .info-icon svg{width:22px;height:22px;}
+  .info-item h3{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:4px;}
+  .info-item p{font-size:13px;color:var(--text-muted);}
+
+  /* MAIN */
+  .main-content{flex:1;padding:48px 2rem;max-width:680px;margin:0 auto;width:100%;}
+
+  /* FORM CARD */
+  .form-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+  .form-header{background:var(--navy);padding:28px 32px;display:flex;align-items:center;gap:16px;}
+  .form-header-icon{width:48px;height:48px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+  .form-header-icon svg{width:24px;height:24px;}
+  .form-header h2{font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:var(--white);}
+  .form-header p{font-size:13px;color:rgba(245,240,232,.55);margin-top:2px;}
+  .form-body{padding:32px;}
+
+  /* FIELDS */
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:13px;font-weight:500;color:var(--text-dark);margin-bottom:7px;}
+  .field label .opt{font-weight:400;color:var(--text-light);font-size:12px;margin-left:4px;}
+  .field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--cream-mid);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;color:var(--text-dark);background:var(--white);transition:border-color .2s;resize:vertical;appearance:none;}
+  .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5568' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+  .field textarea{min-height:130px;}
+  .char-count{font-size:12px;color:var(--text-light);text-align:right;margin-top:4px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+  /* TYPE TOGGLE */
+  .type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+  .type-option{position:relative;}
+  .type-option input[type="radio"]{position:absolute;opacity:0;width:0;height:0;}
+  .type-label{display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:var(--radius);border:1.5px solid var(--cream-mid);cursor:pointer;transition:all .2s;background:var(--cream);}
+  .type-label:hover{border-color:var(--gold);}
+  .type-option input:checked+.type-label{border-color:var(--gold);background:#faf7f0;box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+  .type-label svg{width:20px;height:20px;flex-shrink:0;}
+  .type-label-text{font-weight:500;font-size:14px;}
+
+  /* NOTES */
+  .anon-note{display:flex;align-items:flex-start;gap:10px;background:#f0f7ff;border:1px solid #bee3f8;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:24px;}
+  .anon-note svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:#2b6cb0;}
+  .anon-note p{font-size:13px;color:#2b6cb0;}
+  .warn-note{background:#fffbeb;border-color:#f6d860;}
+  .warn-note svg{color:#92610a;}
+  .warn-note p{color:#92610a;}
+  .form-error{background:var(--error-bg);border:1px solid #f5c6cb;color:var(--error);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:16px;display:none;}
+
+  /* BTN */
+  .submit-btn{width:100%;padding:14px;background:var(--navy);color:var(--white);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .submit-btn:hover{background:var(--navy-mid);transform:translateY(-1px);}
+  .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+  .form-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted);}
+  .form-switch a{color:var(--gold-dim);font-weight:500;cursor:pointer;text-decoration:underline;}
+
+  /* SUCCESS */
+  .success-state{text-align:center;padding:48px 32px;display:none;}
+  .success-icon{width:72px;height:72px;background:var(--success-bg);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;}
+  .success-icon svg{width:36px;height:36px;color:var(--success);}
+  .success-state h3{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:var(--text-dark);margin-bottom:8px;}
+  .success-state p{color:var(--text-muted);max-width:340px;margin:0 auto 24px;}
+  .ref-badge{display:inline-block;background:var(--cream);border:1px solid var(--cream-mid);border-radius:var(--radius-sm);padding:8px 16px;font-size:13px;color:var(--text-muted);margin-bottom:24px;}
+  .ref-badge strong{color:var(--text-dark);font-family:monospace;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--white);padding:12px 20px;border-radius:var(--radius);font-size:14px;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;max-width:320px;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.error{background:var(--error);}
+
+  /* LOGIN */
+  .login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 1rem;background:var(--cream);}
+  .login-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);width:100%;max-width:420px;overflow:hidden;}
+  .login-top{background:var(--navy);padding:32px;text-align:center;}
+  .login-top .logo-mark{margin:0 auto 16px;width:52px;height:52px;font-size:20px;}
+  .login-top h2{font-family:'DM Serif Display',serif;color:var(--white);font-size:22px;font-weight:400;}
+  .login-top p{color:rgba(245,240,232,.5);font-size:13px;margin-top:4px;}
+  .login-body{padding:28px 32px 32px;}
+  .tab-row{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--cream-mid);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:24px;}
+  .tab-btn{padding:10px;font-family:inherit;font-size:13px;font-weight:500;border:none;background:var(--cream);color:var(--text-muted);cursor:pointer;transition:all .2s;}
+  .tab-btn.active{background:var(--navy);color:var(--white);}
+
+  /* ADMIN */
+  .admin-layout{display:flex;flex:1;min-height:0;}
+  .admin-sidebar{width:240px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;padding:24px 16px;}
+  .sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:32px;}
+  .sidebar-logo .logo-mark{width:32px;height:32px;font-size:14px;}
+  .sidebar-logo span{font-size:15px;font-weight:600;color:var(--white);}
+  .sidebar-section{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(245,240,232,.3);padding:0 8px;margin-bottom:8px;margin-top:16px;}
+  .sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);color:rgba(245,240,232,.65);font-size:13px;cursor:pointer;transition:all .15s;border:none;background:none;font-family:inherit;width:100%;text-align:left;}
+  .sidebar-item:hover{background:rgba(255,255,255,.06);color:var(--cream);}
+  .sidebar-item.active{background:rgba(201,168,76,.15);color:var(--gold);}
+  .sidebar-item svg{width:16px;height:16px;}
+  .sidebar-item .badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;min-width:20px;text-align:center;}
+  .sidebar-bottom{margin-top:auto;}
+  .admin-main{flex:1;overflow:auto;background:var(--cream);padding:32px;}
+  .admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+  .admin-topbar h1{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:var(--text-dark);}
+  .admin-topbar p{font-size:13px;color:var(--text-muted);margin-top:2px;}
+
+  /* STATS */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+  .stat-card{background:var(--white);border-radius:var(--radius);padding:20px;border:1px solid var(--cream-mid);}
+  .stat-label{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-light);margin-bottom:8px;}
+  .stat-value{font-size:28px;font-weight:300;color:var(--text-dark);line-height:1;}
+  .stat-sub{font-size:12px;color:var(--text-light);margin-top:4px;}
+  .stat-card.highlight .stat-value{color:var(--gold-dim);}
+
+  /* FILTERS */
+  .filters-bar{background:var(--white);border-radius:var(--radius);border:1px solid var(--cream-mid);padding:16px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+  .filters-bar label{font-size:12px;color:var(--text-muted);margin-right:-4px;}
+  .filter-select{border:1px solid var(--cream-mid);border-radius:6px;padding:7px 28px 7px 10px;font-family:inherit;font-size:13px;color:var(--text-dark);background:var(--cream);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a5568' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;}
+  .filter-select:focus{outline:none;border-color:var(--gold);}
+  .search-input{flex:1;min-width:160px;border:1px solid var(--cream-mid);border-radius:6px;padding:7px 12px;font-family:inherit;font-size:13px;color:var(--text-dark);background:var(--cream);}
+  .search-input:focus{outline:none;border-color:var(--gold);}
+
+  /* TABLE */
+  .submissions-wrap{background:var(--white);border-radius:var(--radius);border:1px solid var(--cream-mid);overflow:hidden;}
+  .submissions-table{width:100%;border-collapse:collapse;}
+  .submissions-table th{background:var(--cream);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-light);padding:12px 16px;text-align:left;font-weight:500;border-bottom:1px solid var(--cream-mid);white-space:nowrap;}
+  .submissions-table td{padding:12px 16px;border-bottom:1px solid var(--cream-mid);vertical-align:middle;font-size:13px;color:var(--text-dark);}
+  .submissions-table tr:last-child td{border-bottom:none;}
+  .submissions-table tr:hover td{background:#fafaf8;}
+  .msg-preview{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* SUBMITTER */
+  .submitter-cell{display:flex;align-items:center;gap:8px;}
+  .sub-avatar{width:30px;height:30px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;}
+  .sub-name{font-size:13px;font-weight:500;color:var(--text-dark);white-space:nowrap;}
+  .sub-meta{font-size:11px;color:var(--text-light);white-space:nowrap;}
+
+  /* BADGES */
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500;letter-spacing:.3px;white-space:nowrap;}
+  .badge-complaint{background:#fde8e8;color:#9b2226;}
+  .badge-compliment{background:#e6f4ea;color:#276749;}
+  .badge-new{background:#e8f0fe;color:#1a3a8f;}
+  .badge-review{background:#fff3cd;color:#7b4f00;}
+  .badge-resolved{background:#e6f4ea;color:#276749;}
+  .badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+  .status-sel{border:1px solid var(--cream-mid);border-radius:6px;padding:5px 24px 5px 8px;font-family:inherit;font-size:12px;background:var(--cream);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%234a5568' stroke-width='1.3' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;}
+  .status-sel:focus{outline:none;border-color:var(--gold);}
+
+  /* EMPTY */
+  .empty-state{padding:64px 24px;text-align:center;}
+  .empty-state svg{width:48px;height:48px;color:var(--cream-dark);margin-bottom:16px;}
+  .empty-state h3{font-size:16px;font-weight:500;color:var(--text-muted);margin-bottom:6px;}
+  .empty-state p{font-size:13px;color:var(--text-light);}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,.5);display:none;align-items:center;justify-content:center;z-index:500;padding:24px;}
+  .modal-overlay.open{display:flex;}
+  .modal-card{background:var(--white);border-radius:16px;width:100%;max-width:560px;box-shadow:var(--shadow-lg);overflow:hidden;}
+  .modal-header{background:var(--navy);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .modal-header h3{font-family:'DM Serif Display',serif;color:var(--white);font-size:18px;font-weight:400;}
+  .modal-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--white);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+  .modal-close:hover{background:rgba(255,255,255,.2);}
+  .modal-body{padding:24px;}
+  .detail-row{display:flex;gap:8px;margin-bottom:16px;align-items:flex-start;}
+  .detail-row label{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-light);min-width:100px;padding-top:2px;}
+  .detail-row .detail-val{font-size:14px;color:var(--text-dark);flex:1;}
+  .message-box{background:var(--cream);border-radius:var(--radius-sm);padding:14px 16px;font-size:14px;line-height:1.7;color:var(--text-dark);margin-top:4px;}
+
+  /* SUBMITTER PROFILE (modal) */
+  .sp-block{display:flex;align-items:center;gap:14px;background:var(--cream);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;}
+  .sp-avatar{width:48px;height:48px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--gold);flex-shrink:0;}
+  .sp-name{font-size:16px;font-weight:600;color:var(--text-dark);}
+  .sp-sub{font-size:13px;color:var(--text-muted);}
+
+  /* USERS GRID */
+  .users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:24px;}
+  .user-card{background:var(--cream);border:1px solid var(--cream-mid);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:12px;}
+  .uc-avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);flex-shrink:0;}
+  .uc-name{font-size:14px;font-weight:500;color:var(--text-dark);}
+  .uc-meta{font-size:12px;color:var(--text-muted);}
+  .uc-count{margin-left:auto;text-align:right;}
+  .uc-count .num{font-size:22px;font-weight:300;color:var(--text-dark);}
+  .uc-count .lbl{font-size:10px;color:var(--text-light);letter-spacing:.5px;}
+
+  @media(max-width:768px){
+    .info-strip{grid-template-columns:1fr;}
+    .info-item{border-right:none;border-bottom:1px solid var(--cream-mid);}
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .admin-sidebar{width:200px;}
+    .admin-main{padding:20px;}
+    .form-body{padding:20px;}
+    .type-toggle,.field-row{grid-template-columns:1fr;}
+  }
+  @media(max-width:560px){
+    .admin-layout{flex-direction:column;}
+    .admin-sidebar{width:100%;padding:12px;flex-direction:row;flex-wrap:wrap;gap:4px;}
+    .admin-sidebar .sidebar-section,.sidebar-bottom{display:none;}
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .hero{padding:48px 1.5rem 40px;}
+    .main-content{padding:24px 1rem;}
+    .site-header{padding:0 1rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HOME ═══ -->
+<div id="view-home" class="view active">
+  <header class="site-header">
+    <div class="logo" onclick="showView('view-home')">
+      <div class="logo-mark">B</div>
+      <span class="logo-text">BIIC <span>Portal</span></span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn" onclick="showView('view-user-login')">Employee Sign In</button>
+      <button class="nav-btn primary" onclick="showView('view-admin-login')">Admin</button>
+    </nav>
+  </header>
+  <div class="hero">
+    <div class="hero-tag">Secure &amp; Confidential</div>
+    <h1>Your voice,<br><em>heard without judgment</em></h1>
+    <p>Submit complaints or compliments using your BIIC account. Your feedback goes directly to management.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="showView('view-user-login')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Submit Feedback
+      </button>
+      <button class="btn btn-outline" onclick="showView('view-admin-login')">Admin Login</button>
+    </div>
+  </div>
+  <div class="info-strip">
+    <div class="info-item">
+      <div class="info-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <h3>Login Required</h3>
+      <p>Sign in with your BIIC account so management can identify and follow up on submissions.</p>
+    </div>
+    <div class="info-item">
+      <div class="info-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>Admin-Only Access</h3>
+      <p>Your name is visible only to authorised BIIC administrators — not to other employees.</p>
+    </div>
+    <div class="info-item">
+      <div class="info-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h3>Tracked &amp; Actioned</h3>
+      <p>Every submission moves through a clear New → In Review → Resolved process.</p>
+    </div>
+  </div>
+  <footer style="background:var(--navy);padding:20px 2rem;text-align:center;">
+    <p style="font-size:12px;color:rgba(245,240,232,.3);">&copy; 2025 BIIC &mdash; Feedback Portal &mdash; Visible to authorised admin only</p>
+  </footer>
+</div>
+
+<!-- ═══ USER LOGIN / REGISTER ═══ -->
+<div id="view-user-login" class="view">
+  <header class="site-header">
+    <div class="logo" onclick="showView('view-home')">
+      <div class="logo-mark">B</div>
+      <span class="logo-text">BIIC <span>Portal</span></span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn" onclick="showView('view-home')">← Back</button>
+    </nav>
+  </header>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-top">
+        <div class="logo-mark">B</div>
+        <h2>Employee Access</h2>
+        <p>Sign in or create your BIIC account</p>
+      </div>
+      <div class="login-body">
+        <div class="tab-row">
+          <button class="tab-btn active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+          <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <!-- SIGN IN -->
+        <div id="signin-form">
+          <div class="form-error" id="signin-error">Incorrect email or password. Please try again.</div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="si-email" placeholder="you@biic.co.za" autocomplete="email">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="si-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doUserLogin()">
+          </div>
+          <button class="submit-btn" onclick="doUserLogin()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+            Sign In
+          </button>
+          <p class="form-switch">No account? <a onclick="switchTab('register')">Register here</a></p>
+          <p style="font-size:12px;color:var(--text-light);text-align:center;margin-top:12px;">Demo: s.mokoena@biic.co.za / demo123</p>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="register-form" style="display:none;">
+          <div class="form-error" id="reg-error">That email is already registered.</div>
+          <div class="field-row">
+            <div class="field">
+              <label>First Name</label>
+              <input type="text" id="reg-first" placeholder="Jane">
+            </div>
+            <div class="field">
+              <label>Last Name</label>
+              <input type="text" id="reg-last" placeholder="Smith">
+            </div>
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="you@biic.co.za">
+          </div>
+          <div class="field">
+            <label>Department <span class="opt">(optional)</span></label>
+            <select id="reg-dept">
+              <option value="">Select department...</option>
+              <option>Management</option><option>Human Resources</option><option>Finance</option>
+              <option>IT</option><option>Operations</option><option>Sales</option>
+              <option>Customer Service</option><option>Legal</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="reg-pass" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
+          </div>
+          <div class="anon-note warn-note" style="margin-bottom:16px;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Your name will be visible to BIIC administrators with your submissions so they can follow up appropriately.</p>
+          </div>
+          <button class="submit-btn" onclick="doRegister()">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Create Account &amp; Continue
+          </button>
+          <p class="form-switch">Already registered? <a onclick="switchTab('signin')">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUBMIT FEEDBACK ═══ -->
+<div id="view-submit" class="view">
+  <header class="site-header">
+    <div class="logo" onclick="showView('view-home')">
+      <div class="logo-mark">B</div>
+      <span class="logo-text">BIIC <span>Portal</span></span>
+    </div>
+    <nav class="header-nav">
+      <div class="user-chip">
+        <div class="user-avatar" id="submit-avatar">?</div>
+        <span id="submit-name">User</span>
+      </div>
+      <button class="nav-btn" onclick="doUserLogout()">Sign Out</button>
+    </nav>
+  </header>
+  <div class="main-content">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-header-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <div>
+          <h2>Submit Feedback</h2>
+          <p id="submit-greeting">Logged in</p>
+        </div>
+      </div>
+      <div class="form-body" id="fb-form-body">
+        <div class="anon-note">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>Your name is attached to this submission so management can follow up. Only authorised administrators can view submissions.</p>
+        </div>
+        <div class="type-toggle">
+          <div class="type-option">
+            <input type="radio" name="fbtype" id="type-complaint" value="complaint" checked>
+            <label for="type-complaint" class="type-label">
+              <svg fill="none" viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span class="type-label-text">Complaint</span>
+            </label>
+          </div>
+          <div class="type-option">
+            <input type="radio" name="fbtype" id="type-compliment" value="compliment">
+            <label for="type-compliment" class="type-label">
+              <svg fill="none" viewBox="0 0 24 24" stroke="#38a169" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span class="type-label-text">Compliment</span>
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fb-category">Category <span class="opt">(optional)</span></label>
+          <select id="fb-category">
+            <option value="">Select a category...</option>
+            <option>Management</option><option>HR / People</option><option>Facilities</option>
+            <option>IT / Systems</option><option>Safety</option><option>Communication</option>
+            <option>Customer Service</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fb-message">Message <span style="color:var(--gold-dim)">*</span></label>
+          <textarea id="fb-message" placeholder="Describe your feedback in detail..." maxlength="1000" oninput="document.getElementById('char-count').textContent=this.value.length"></textarea>
+          <div class="char-count"><span id="char-count">0</span> / 1000</div>
+        </div>
+        <button class="submit-btn" onclick="submitFeedback()" id="fb-submit-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit Feedback
+        </button>
+      </div>
+      <div class="success-state" id="fb-success">
+        <div class="success-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Feedback Received</h3>
+        <p>Thank you. Your submission has been recorded and will be reviewed by the BIIC management team.</p>
+        <div class="ref-badge">Reference: <strong id="fb-ref-id"></strong></div>
+        <button class="btn btn-primary" onclick="resetFbForm()">Submit Another</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN LOGIN ═══ -->
+<div id="view-admin-login" class="view">
+  <header class="site-header">
+    <div class="logo" onclick="showView('view-home')">
+      <div class="logo-mark">B</div>
+      <span class="logo-text">BIIC <span>Portal</span></span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn" onclick="showView('view-home')">← Back</button>
+    </nav>
+  </header>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-top">
+        <div class="logo-mark">B</div>
+        <h2>Admin Access</h2>
+        <p>Authorised BIIC staff only</p>
+      </div>
+      <div class="login-body">
+        <div class="form-error" id="admin-login-error">Incorrect credentials. Please try again.</div>
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="admin-user" placeholder="Enter username" autocomplete="username">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="admin-pass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+        </div>
+        <button class="submit-btn" onclick="doAdminLogin()" style="margin-top:8px;">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Sign In as Admin
+        </button>
+        <p style="font-size:12px;color:var(--text-light);text-align:center;margin-top:16px;">Demo: admin / biic2025</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN DASHBOARD ═══ -->
+<div id="view-admin" class="view">
+  <header class="site-header">
+    <div class="logo">
+      <div class="logo-mark">B</div>
+      <span class="logo-text">BIIC <span>Admin</span></span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn" onclick="doAdminLogout()">Sign Out</button>
+    </nav>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-logo"><span>Dashboard</span></div>
+      <div class="sidebar-section">Submissions</div>
+      <button class="sidebar-item active" id="nav-all" onclick="filterView('all',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        All Submissions <span class="badge" id="count-all">0</span>
+      </button>
+      <button class="sidebar-item" id="nav-complaint" onclick="filterView('complaint',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Complaints <span class="badge" id="count-complaint">0</span>
+      </button>
+      <button class="sidebar-item" id="nav-compliment" onclick="filterView('compliment',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Compliments <span class="badge" id="count-compliment">0</span>
+      </button>
+      <div class="sidebar-section">Status</div>
+      <button class="sidebar-item" id="nav-new" onclick="filterView('new',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        New <span class="badge" id="count-new">0</span>
+      </button>
+      <button class="sidebar-item" id="nav-in-review" onclick="filterView('in review',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        In Review <span class="badge" id="count-review">0</span>
+      </button>
+      <button class="sidebar-item" id="nav-resolved" onclick="filterView('resolved',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+        Resolved <span class="badge" id="count-resolved">0</span>
+      </button>
+      <div class="sidebar-section">People</div>
+      <button class="sidebar-item" id="nav-users" onclick="filterView('users',this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Registered Users <span class="badge" id="count-users">0</span>
+      </button>
+      <div class="sidebar-bottom">
+        <button class="sidebar-item" onclick="if(confirm('Clear all submissions?')){clearData()}">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+          Clear Submissions
+        </button>
+      </div>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1 id="admin-view-title">All Submissions</h1>
+          <p id="admin-view-sub">Showing all feedback with submitter names</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" id="s-total">0</div><div class="stat-sub">submissions</div></div>
+        <div class="stat-card"><div class="stat-label">Complaints</div><div class="stat-value" id="s-complaints">0</div><div class="stat-sub">require attention</div></div>
+        <div class="stat-card"><div class="stat-label">Compliments</div><div class="stat-value" id="s-compliments">0</div><div class="stat-sub">positive feedback</div></div>
+        <div class="stat-card highlight"><div class="stat-label">Pending</div><div class="stat-value" id="s-pending">0</div><div class="stat-sub">new &amp; in review</div></div>
+      </div>
+
+      <!-- SUBMISSIONS PANEL -->
+      <div id="panel-submissions">
+        <div class="filters-bar">
+          <label>Filter:</label>
+          <select class="filter-select" id="filter-type" onchange="renderTable()">
+            <option value="">All Types</option>
+            <option value="complaint">Complaint</option>
+            <option value="compliment">Compliment</option>
+          </select>
+          <select class="filter-select" id="filter-status" onchange="renderTable()">
+            <option value="">All Statuses</option>
+            <option value="new">New</option>
+            <option value="in review">In Review</option>
+            <option value="resolved">Resolved</option>
+          </select>
+          <select class="filter-select" id="filter-cat" onchange="renderTable()">
+            <option value="">All Categories</option>
+            <option>Management</option><option>HR / People</option><option>Facilities</option>
+            <option>IT / Systems</option><option>Safety</option><option>Communication</option>
+            <option>Customer Service</option><option>Other</option>
+          </select>
+          <input class="search-input" id="search-input" type="text" placeholder="Search by name, email or message..." oninput="renderTable()">
+        </div>
+        <div class="submissions-wrap">
+          <table class="submissions-table">
+            <thead>
+              <tr>
+                <th>Submitted By</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="submissions-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" style="display:none;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <h3>No submissions found</h3>
+            <p>Try adjusting your filters or wait for new feedback.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS PANEL -->
+      <div id="panel-users" style="display:none;">
+        <div class="submissions-wrap">
+          <div class="users-grid" id="users-grid"></div>
+          <div class="empty-state" id="users-empty" style="display:none;">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <h3>No registered users yet</h3>
+            <p>Users appear here once they register on the portal.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="detail-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Submission Detail</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUBS_KEY='biic_submissions', USERS_KEY='biic_users';
+const ADMIN_CREDS={username:'admin',password:'biic2025'};
+let currentUser=null, adminLoggedIn=false;
+
+function getSubs(){try{return JSON.parse(localStorage.getItem(SUBS_KEY))||[];}catch{return [];}}
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||[];}catch{return [];}}
+function saveSubs(d){localStorage.setItem(SUBS_KEY,JSON.stringify(d));}
+function saveUsers(d){localStorage.setItem(USERS_KEY,JSON.stringify(d));}
+function genRef(){return 'BIIC-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,5).toUpperCase();}
+function initials(n){return String(n).split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2)||'?';}
+
+function seedDemoData(){
+  if(!getUsers().length){
+    saveUsers([
+      {id:'u1',firstName:'Sarah',lastName:'Mokoena',email:'s.mokoena@biic.co.za',dept:'Human Resources',password:'demo123'},
+      {id:'u2',firstName:'James',lastName:'van der Berg',email:'j.vdberg@biic.co.za',dept:'IT',password:'demo123'},
+      {id:'u3',firstName:'Nomvula',lastName:'Dlamini',email:'n.dlamini@biic.co.za',dept:'Operations',password:'demo123'},
+    ]);
+  }
+  if(!getSubs().length){
+    saveSubs([
+      {id:genRef(),type:'complaint',category:'Facilities',message:'The air conditioning in the open-plan office has been broken for two weeks. The temperature is very uncomfortable in the afternoons and is noticeably affecting productivity.',status:'in review',date:new Date(Date.now()-4*86400000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
+      {id:genRef(),type:'compliment',category:'Management',message:'I want to acknowledge how our team lead handled the recent project deadline extension. The communication was clear, empathetic, and made a stressful situation very manageable. Truly excellent leadership.',status:'resolved',date:new Date(Date.now()-2*86400000).toISOString(),submitterId:'u2',submitterName:'James van der Berg',submitterEmail:'j.vdberg@biic.co.za',submitterDept:'IT'},
+      {id:genRef(),type:'complaint',category:'IT / Systems',message:'The VPN connectivity has been unstable for remote workers over the past month. Constant disconnections during video calls are making effective collaboration very difficult.',status:'new',date:new Date(Date.now()-86400000).toISOString(),submitterId:'u3',submitterName:'Nomvula Dlamini',submitterEmail:'n.dlamini@biic.co.za',submitterDept:'Operations'},
+      {id:genRef(),type:'compliment',category:'Customer Service',message:'The support team went above and beyond during our client visit last week. They were professional, well-prepared, and represented BIIC exceptionally well. Our client was very impressed.',status:'new',date:new Date(Date.now()-3600000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
+    ]);
+  }
+}
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='view-admin'){updateAdminBadges();renderTable();}
+}
+
+function switchTab(tab){
+  document.getElementById('signin-form').style.display=tab==='signin'?'block':'none';
+  document.getElementById('register-form').style.display=tab==='register'?'block':'none';
+  document.getElementById('tab-signin').classList.toggle('active',tab==='signin');
+  document.getElementById('tab-register').classList.toggle('active',tab==='register');
+  document.getElementById('signin-error').style.display='none';
+  document.getElementById('reg-error').style.display='none';
+}
+
+function doUserLogin(){
+  const email=document.getElementById('si-email').value.trim().toLowerCase();
+  const pass=document.getElementById('si-pass').value;
+  const user=getUsers().find(u=>u.email.toLowerCase()===email&&u.password===pass);
+  if(user){currentUser=user;document.getElementById('signin-error').style.display='none';loadSubmitView();}
+  else{document.getElementById('signin-error').style.display='block';document.getElementById('si-pass').value='';}
+}
+
+function doRegister(){
+  const first=document.getElementById('reg-first').value.trim();
+  const last=document.getElementById('reg-last').value.trim();
+  const email=document.getElementById('reg-email').value.trim().toLowerCase();
+  const dept=document.getElementById('reg-dept').value;
+  const pass=document.getElementById('reg-pass').value;
+  const err=document.getElementById('reg-error');
+  if(!first||!last){showToast('Please enter your full name.',true);return;}
+  if(!email.includes('@')){showToast('Please enter a valid email.',true);return;}
+  if(pass.length<6){showToast('Password must be at least 6 characters.',true);return;}
+  const users=getUsers();
+  if(users.find(u=>u.email.toLowerCase()===email)){err.textContent='That email is already registered. Please sign in.';err.style.display='block';return;}
+  const nu={id:'u'+Date.now(),firstName:first,lastName:last,email,dept,password:pass};
+  users.push(nu);saveUsers(users);
+  currentUser=nu;err.style.display='none';
+  loadSubmitView();showToast('Welcome, '+first+'! Account created.');
+}
+
+function doUserLogout(){currentUser=null;showView('view-home');}
+
+function loadSubmitView(){
+  const name=currentUser.firstName+' '+currentUser.lastName;
+  document.getElementById('submit-avatar').textContent=initials(name);
+  document.getElementById('submit-name').textContent=currentUser.firstName;
+  document.getElementById('submit-greeting').textContent='Logged in as '+name+(currentUser.dept?' · '+currentUser.dept:'');
+  resetFbForm();showView('view-submit');
+}
+
+function submitFeedback(){
+  if(!currentUser){showToast('Please sign in first.',true);return;}
+  const type=document.querySelector('input[name="fbtype"]:checked').value;
+  const category=document.getElementById('fb-category').value;
+  const message=document.getElementById('fb-message').value.trim();
+  if(!message){showToast('Please enter your feedback message.',true);return;}
+  if(message.length<10){showToast('Message is too short — please add more detail.',true);return;}
+  const btn=document.getElementById('fb-submit-btn');
+  btn.disabled=true;btn.textContent='Submitting...';
+  setTimeout(()=>{
+    const ref=genRef();
+    const subs=getSubs();
+    subs.unshift({
+      id:ref,type,category:category||'Uncategorised',message,
+      status:'new',date:new Date().toISOString(),
+      submitterId:currentUser.id,
+      submitterName:currentUser.firstName+' '+currentUser.lastName,
+      submitterEmail:currentUser.email,
+      submitterDept:currentUser.dept||''
+    });
+    saveSubs(subs);
+    document.getElementById('fb-ref-id').textContent=ref;
+    document.getElementById('fb-form-body').style.display='none';
+    document.getElementById('fb-success').style.display='block';
+    btn.disabled=false;btn.innerHTML='<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Feedback';
+  },800);
+}
+
+function resetFbForm(){
+  document.getElementById('fb-message').value='';
+  document.getElementById('fb-category').value='';
+  document.getElementById('char-count').textContent='0';
+  document.querySelector('input[value="complaint"]').checked=true;
+  document.getElementById('fb-form-body').style.display='block';
+  document.getElementById('fb-success').style.display='none';
+}
+
+function doAdminLogin(){
+  const u=document.getElementById('admin-user').value.trim();
+  const p=document.getElementById('admin-pass').value;
+  const err=document.getElementById('admin-login-error');
+  if(u===ADMIN_CREDS.username&&p===ADMIN_CREDS.password){
+    adminLoggedIn=true;err.style.display='none';seedDemoData();showView('view-admin');
+  }else{err.style.display='block';document.getElementById('admin-pass').value='';}
+}
+function doAdminLogout(){
+  adminLoggedIn=false;
+  document.getElementById('admin-user').value='';
+  document.getElementById('admin-pass').value='';
+  showView('view-home');
+}
+
+function filterView(filter,btn){
+  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const isUsers=filter==='users';
+  document.getElementById('panel-submissions').style.display=isUsers?'none':'block';
+  document.getElementById('panel-users').style.display=isUsers?'block':'none';
+  const T={all:'All Submissions',complaint:'Complaints',compliment:'Compliments',new:'New Submissions','in review':'In Review',resolved:'Resolved',users:'Registered Users'};
+  const S={all:'All feedback with submitter names',complaint:'Submissions marked as complaints',compliment:'Submissions marked as compliments',new:'Awaiting initial review','in review':'Currently being investigated',resolved:'Closed submissions',users:'All employees registered on the portal'};
+  document.getElementById('admin-view-title').textContent=T[filter]||'Submissions';
+  document.getElementById('admin-view-sub').textContent=S[filter]||'';
+  if(!isUsers){
+    document.getElementById('filter-type').value=(filter==='complaint'||filter==='compliment')?filter:'';
+    document.getElementById('filter-status').value=(filter==='new'||filter==='in review'||filter==='resolved')?filter:'';
+    renderTable();
+  }else{renderUsers();}
+}
+
+function updateAdminBadges(){
+  const d=getSubs(),u=getUsers();
+  const c=d.filter(x=>x.type==='complaint').length;
+  const cm=d.filter(x=>x.type==='compliment').length;
+  const nw=d.filter(x=>x.status==='new').length;
+  const rv=d.filter(x=>x.status==='in review').length;
+  const rs=d.filter(x=>x.status==='resolved').length;
+  document.getElementById('count-all').textContent=d.length;
+  document.getElementById('count-complaint').textContent=c;
+  document.getElementById('count-compliment').textContent=cm;
+  document.getElementById('count-new').textContent=nw;
+  document.getElementById('count-review').textContent=rv;
+  document.getElementById('count-resolved').textContent=rs;
+  document.getElementById('count-users').textContent=u.length;
+  document.getElementById('s-total').textContent=d.length;
+  document.getElementById('s-complaints').textContent=c;
+  document.getElementById('s-compliments').textContent=cm;
+  document.getElementById('s-pending').textContent=nw+rv;
+}
+
+function renderTable(){
+  if(!adminLoggedIn)return;
+  updateAdminBadges();
+  const data=getSubs();
+  const ftype=document.getElementById('filter-type').value;
+  const fstat=document.getElementById('filter-status').value;
+  const fcat=document.getElementById('filter-cat').value;
+  const search=document.getElementById('search-input').value.toLowerCase();
+  const filtered=data.filter(d=>{
+    if(ftype&&d.type!==ftype)return false;
+    if(fstat&&d.status!==fstat)return false;
+    if(fcat&&d.category!==fcat)return false;
+    if(search){
+      const h=(d.message+' '+d.submitterName+' '+d.submitterEmail+' '+d.category).toLowerCase();
+      if(!h.includes(search))return false;
+    }
+    return true;
+  });
+  const tbody=document.getElementById('submissions-tbody');
+  const empty=document.getElementById('empty-state');
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=filtered.map(d=>{
+    const date=new Date(d.date).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'2-digit'});
+    const time=new Date(d.date).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+    const name=d.submitterName||'Unknown';
+    const av=initials(name);
+    const tb=d.type==='complaint'
+      ?`<span class="badge badge-complaint"><span class="badge-dot"></span>Complaint</span>`
+      :`<span class="badge badge-compliment"><span class="badge-dot"></span>Compliment</span>`;
+    const scls={new:'badge-new','in review':'badge-review',resolved:'badge-resolved'}[d.status]||'badge-new';
+    return `<tr>
+      <td>
+        <div class="submitter-cell">
+          <div class="sub-avatar">${escHtml(av)}</div>
+          <div>
+            <div class="sub-name">${escHtml(name)}</div>
+            <div class="sub-meta">${escHtml(d.submitterEmail||'')}${d.submitterDept?' · '+escHtml(d.submitterDept):''}</div>
+          </div>
+        </div>
+      </td>
+      <td>${tb}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${escHtml(d.category||'—')}</td>
+      <td><div class="msg-preview">${escHtml(d.message)}</div></td>
+      <td style="font-size:12px;color:var(--text-muted);white-space:nowrap">${date}<br>${time}</td>
+      <td><span class="badge ${scls}"><span class="badge-dot"></span>${d.status}</span></td>
+      <td style="white-space:nowrap">
+        <select class="status-sel" onchange="updateStatus('${d.id}',this.value)">
+          <option ${d.status==='new'?'selected':''} value="new">New</option>
+          <option ${d.status==='in review'?'selected':''} value="in review">In Review</option>
+          <option ${d.status==='resolved'?'selected':''} value="resolved">Resolved</option>
+        </select>
+        <button onclick="openDetail('${d.id}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);margin-left:4px;font-size:18px;line-height:1;" title="View detail">⋯</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderUsers(){
+  updateAdminBadges();
+  const users=getUsers(),subs=getSubs();
+  const grid=document.getElementById('users-grid');
+  const empty=document.getElementById('users-empty');
+  if(!users.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=users.map(u=>{
+    const name=u.firstName+' '+u.lastName;
+    const count=subs.filter(s=>s.submitterId===u.id).length;
+    return `<div class="user-card">
+      <div class="uc-avatar">${initials(name)}</div>
+      <div>
+        <div class="uc-name">${escHtml(name)}</div>
+        <div class="uc-meta">${escHtml(u.email)}</div>
+        <div class="uc-meta">${escHtml(u.dept||'No department')}</div>
+      </div>
+      <div class="uc-count">
+        <div class="num">${count}</div>
+        <div class="lbl">item${count===1?'':'s'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStatus(id,newStatus){
+  const subs=getSubs();
+  const item=subs.find(d=>d.id===id);
+  if(item){item.status=newStatus;saveSubs(subs);showToast('Status updated to "'+newStatus+'"');renderTable();}
+}
+
+function openDetail(id){
+  const d=getSubs().find(x=>x.id===id);
+  if(!d)return;
+  const date=new Date(d.date).toLocaleString('en-ZA');
+  const name=d.submitterName||'Unknown';
+  const tb=d.type==='complaint'
+    ?`<span class="badge badge-complaint">Complaint</span>`
+    :`<span class="badge badge-compliment">Compliment</span>`;
+  document.getElementById('modal-body').innerHTML=`
+    <div class="sp-block">
+      <div class="sp-avatar">${escHtml(initials(name))}</div>
+      <div>
+        <div class="sp-name">${escHtml(name)}</div>
+        <div class="sp-sub">${escHtml(d.submitterEmail||'')}${d.submitterDept?' &middot; '+escHtml(d.submitterDept):''}</div>
+      </div>
+    </div>
+    <div class="detail-row">
+      <label>Reference</label>
+      <div class="detail-val" style="font-family:monospace;font-size:12px">${d.id}</div>
+    </div>
+    <div class="detail-row">
+      <label>Type</label>
+      <div class="detail-val">${tb}</div>
+    </div>
+    <div class="detail-row">
+      <label>Category</label>
+      <div class="detail-val">${escHtml(d.category||'—')}</div>
+    </div>
+    <div class="detail-row">
+      <label>Submitted</label>
+      <div class="detail-val">${date}</div>
+    </div>
+    <div class="detail-row">
+      <label>Status</label>
+      <div class="detail-val">
+        <select class="status-sel" onchange="updateStatus('${d.id}',this.value);closeModal()">
+          <option ${d.status==='new'?'selected':''} value="new">New</option>
+          <option ${d.status==='in review'?'selected':''} value="in review">In Review</option>
+          <option ${d.status==='resolved'?'selected':''} value="resolved">Resolved</option>
+        </select>
+      </div>
+    </div>
+    <div class="detail-row" style="flex-direction:column;gap:8px">
+      <label>Message</label>
+      <div class="message-box">${escHtml(d.message)}</div>
+    </div>`;
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('detail-modal').classList.remove('open');}
+function clearData(){localStorage.removeItem(SUBS_KEY);renderTable();showToast('All submissions cleared.');}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+let toastTimer;
+function showToast(msg,isError){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(isError?' error':'');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+seedDemoData();
+</script>
+</body>
+</html>
