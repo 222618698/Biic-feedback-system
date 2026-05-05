@@ -6,9 +6,6 @@
 <title>BIIC Feedback Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════════ */
 :root {
   --navy:#0a1628; --navy-mid:#152440; --navy-light:#1e3356; --navy-card:#0f1f38;
   --gold:#c9a84c; --gold-light:#e8c97a; --gold-dim:#7a5f25; --gold-glow:rgba(201,168,76,.25);
@@ -23,14 +20,11 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-dark);min-height:100vh;font-size:15px;line-height:1.6;overflow-x:hidden;}
 
-/* ── VIEWS ── */
 .view{display:none;min-height:100vh;}
 .view.active{display:flex;flex-direction:column;}
 #view-home.active{display:block;}
 
-/* ═══════════════════════════════════════════════
-   LANDING PAGE — NAVBAR
-═══════════════════════════════════════════════ */
+/* NAV */
 .lp-nav {
   position:fixed; top:0; left:0; right:0; z-index:200;
   display:flex; align-items:center; justify-content:space-between;
@@ -68,16 +62,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 }
 .lp-nav-cta:hover { background:var(--gold-light); box-shadow:0 0 0 6px var(--gold-glow); transform:translateY(-1px); }
 
-/* ═══════════════════════════════════════════════
-   HERO SECTION
-═══════════════════════════════════════════════ */
+/* HERO */
 .lp-hero {
   min-height:100vh; display:flex; align-items:center; justify-content:center;
   position:relative; overflow:hidden;
   background:radial-gradient(ellipse at 30% 60%, #152a50 0%, #0a1628 55%, #050d1a 100%);
 }
-
-/* Animated grid */
 .lp-grid {
   position:absolute; inset:0; pointer-events:none;
   background-image:
@@ -87,8 +77,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   animation:gridDrift 20s linear infinite;
 }
 @keyframes gridDrift { from{transform:translateY(0)} to{transform:translateY(60px)} }
-
-/* Floating orbs */
 .lp-orb {
   position:absolute; border-radius:50%; pointer-events:none;
   filter:blur(80px); animation:orbFloat 12s ease-in-out infinite;
@@ -96,30 +84,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .lp-orb-1 { width:500px; height:500px; background:rgba(201,168,76,.07); top:-100px; right:-100px; animation-delay:0s; }
 .lp-orb-2 { width:350px; height:350px; background:rgba(30,51,86,.6); bottom:-50px; left:-50px; animation-delay:-4s; }
 .lp-orb-3 { width:250px; height:250px; background:rgba(201,168,76,.05); top:40%; left:20%; animation-delay:-8s; }
-@keyframes orbFloat {
-  0%,100%{transform:translateY(0) scale(1);}
-  50%{transform:translateY(-40px) scale(1.05);}
-}
-
-/* Particle dots */
+@keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-40px) scale(1.05);} }
 .lp-particles { position:absolute; inset:0; pointer-events:none; }
 .lp-particle {
   position:absolute; width:2px; height:2px; border-radius:50%; background:var(--gold);
   opacity:0; animation:particleFade 4s ease-in-out infinite;
 }
-@keyframes particleFade {
-  0%{opacity:0;transform:translateY(0)}
-  20%{opacity:.6}
-  80%{opacity:.3}
-  100%{opacity:0;transform:translateY(-60px)}
-}
-
+@keyframes particleFade { 0%{opacity:0;transform:translateY(0)} 20%{opacity:.6} 80%{opacity:.3} 100%{opacity:0;transform:translateY(-60px)} }
 .lp-hero-inner {
   position:relative; z-index:10; text-align:center;
   padding:120px 2rem 80px; max-width:860px; margin:0 auto;
 }
-
-/* Animated badge */
 .lp-hero-badge {
   display:inline-flex; align-items:center; gap:8px;
   background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25);
@@ -127,17 +102,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   opacity:0; transform:translateY(20px);
   animation:fadeUp .8s .2s forwards;
 }
-.lp-hero-badge-dot {
-  width:7px; height:7px; border-radius:50%; background:var(--gold);
-  animation:pulseDot 2s ease-in-out infinite;
-}
-@keyframes pulseDot {
-  0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.6);}
-  50%{box-shadow:0 0 0 5px rgba(201,168,76,0);}
-}
+.lp-hero-badge-dot { width:7px; height:7px; border-radius:50%; background:var(--gold); animation:pulseDot 2s ease-in-out infinite; }
+@keyframes pulseDot { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.6);} 50%{box-shadow:0 0 0 5px rgba(201,168,76,0);} }
 .lp-hero-badge span { font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:var(--gold-light); font-weight:500; }
-
-/* Headline */
 .lp-hero-h1 {
   font-family:'DM Serif Display',serif;
   font-size:clamp(42px,7vw,80px);
@@ -147,24 +114,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   animation:fadeUp .9s .4s forwards;
 }
 .lp-hero-h1 .word-gold { color:var(--gold); font-style:italic; }
-.lp-hero-h1 .word-outline {
-  -webkit-text-stroke:1.5px rgba(255,255,255,.4);
-  color:transparent;
-}
-
-/* Typed cursor */
 .typed-cursor { color:var(--gold); animation:blink .9s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-/* Subtitle */
 .lp-hero-sub {
   font-size:18px; color:rgba(245,240,232,.55); max-width:560px;
   margin:0 auto 48px; line-height:1.7;
   opacity:0; transform:translateY(20px);
   animation:fadeUp .9s .6s forwards;
 }
-
-/* CTA group */
 .lp-hero-ctas {
   display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
   opacity:0; transform:translateY(20px);
@@ -187,23 +144,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   transition:all .25s; backdrop-filter:blur(8px);
 }
 .lp-cta-secondary:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.2); transform:translateY(-2px); }
-
-/* Stats row */
 .lp-stats {
   display:flex; justify-content:center; gap:48px; margin-top:72px;
   opacity:0; animation:fadeUp .9s 1s forwards;
   flex-wrap:wrap;
 }
 .lp-stat { text-align:center; }
-.lp-stat-num {
-  font-family:'DM Serif Display',serif;
-  font-size:36px; color:var(--white); line-height:1;
-}
+.lp-stat-num { font-family:'DM Serif Display',serif; font-size:36px; color:var(--white); line-height:1; }
 .lp-stat-num span { color:var(--gold); }
 .lp-stat-label { font-size:12px; color:rgba(245,240,232,.4); margin-top:4px; letter-spacing:.5px; text-transform:uppercase; }
 .lp-stat-div { width:1px; background:rgba(255,255,255,.1); align-self:stretch; }
-
-/* Scroll indicator */
 .lp-scroll-hint {
   position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
   display:flex; flex-direction:column; align-items:center; gap:8px;
@@ -212,92 +162,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .lp-scroll-hint span { font-size:11px; color:rgba(245,240,232,.3); letter-spacing:1px; text-transform:uppercase; }
 .lp-scroll-arrow { animation:scrollBounce 2s ease-in-out infinite; }
 @keyframes scrollBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-
-/* Fade up keyframe */
 @keyframes fadeUp { to{opacity:1;transform:translateY(0)} }
 
-/* ═══════════════════════════════════════════════
-   HOW IT WORKS SECTION
-═══════════════════════════════════════════════ */
-.lp-section {
-  padding:100px 48px; position:relative;
-}
+/* SECTIONS */
+.lp-section { padding:100px 48px; position:relative; }
 .lp-section-dark { background:var(--navy); }
 .lp-section-mid { background:#0d1c30; }
 .lp-section-light { background:#101f35; }
-
 .lp-section-label {
   display:inline-flex; align-items:center; gap:8px;
   font-size:11px; letter-spacing:2px; text-transform:uppercase;
   color:var(--gold); margin-bottom:16px; font-weight:600;
 }
 .lp-section-label::before { content:''; width:24px; height:1px; background:var(--gold); }
-.lp-section-h2 {
-  font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,48px);
-  font-weight:400; color:var(--white); line-height:1.15; margin-bottom:16px;
-}
+.lp-section-h2 { font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,48px); font-weight:400; color:var(--white); line-height:1.15; margin-bottom:16px; }
 .lp-section-h2 em { color:var(--gold); font-style:italic; }
 .lp-section-sub { font-size:16px; color:rgba(245,240,232,.5); max-width:520px; }
-
-/* Steps */
-.lp-steps {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
-  margin-top:60px; border-radius:16px; overflow:hidden;
-}
+.lp-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-top:60px; border-radius:16px; overflow:hidden; }
 .lp-step {
   background:#0f1e33; padding:40px 32px; position:relative;
   border:1px solid rgba(255,255,255,.04);
-  transition:background .3s, transform .3s;
   opacity:0; transform:translateY(30px); transition:opacity .6s, transform .6s, background .3s;
 }
 .lp-step.in-view { opacity:1; transform:translateY(0); }
 .lp-step:hover { background:#132038; }
-.lp-step-num {
-  font-family:'DM Serif Display',serif; font-size:72px; font-weight:400;
-  color:rgba(201,168,76,.08); line-height:1;
-  position:absolute; top:16px; right:24px;
-}
-.lp-step-icon {
-  width:52px; height:52px; background:rgba(201,168,76,.1);
-  border:1px solid rgba(201,168,76,.2); border-radius:12px;
-  display:flex; align-items:center; justify-content:center; margin-bottom:20px;
-}
+.lp-step-num { font-family:'DM Serif Display',serif; font-size:72px; font-weight:400; color:rgba(201,168,76,.08); line-height:1; position:absolute; top:16px; right:24px; }
+.lp-step-icon { width:52px; height:52px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.2); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
 .lp-step-icon svg { width:24px; height:24px; }
 .lp-step h3 { font-size:18px; font-weight:600; color:var(--white); margin-bottom:10px; }
 .lp-step p { font-size:14px; color:rgba(245,240,232,.5); line-height:1.7; }
-
-/* Features grid */
-.lp-features {
-  display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:60px; max-width:1100px; margin-left:auto; margin-right:auto;
-}
+.lp-features { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:60px; max-width:1100px; margin-left:auto; margin-right:auto; }
 .lp-feature {
-  background:#0f1e33; border:1px solid rgba(255,255,255,.05);
-  border-radius:16px; padding:32px;
+  background:#0f1e33; border:1px solid rgba(255,255,255,.05); border-radius:16px; padding:32px;
   display:flex; gap:20px; align-items:flex-start;
   opacity:0; transform:translateX(-20px);
   transition:opacity .6s, transform .6s, background .3s, border-color .3s;
 }
 .lp-feature.in-view { opacity:1; transform:translateX(0); }
 .lp-feature:hover { background:#132038; border-color:rgba(201,168,76,.15); }
-.lp-feature-icon {
-  width:48px; height:48px; border-radius:10px; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-}
+.lp-feature-icon { width:48px; height:48px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
 .lp-feature-icon svg { width:22px; height:22px; }
 .lp-feature h3 { font-size:16px; font-weight:600; color:var(--white); margin-bottom:6px; }
 .lp-feature p { font-size:13px; color:rgba(245,240,232,.5); line-height:1.6; }
-
-/* Testimonials / quotes */
-.lp-quotes {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
-  margin-top:60px; max-width:1100px; margin-left:auto; margin-right:auto;
-}
-.lp-quote {
-  background:#0f1e33; border:1px solid rgba(255,255,255,.05);
-  border-radius:16px; padding:28px;
-  opacity:0; transform:translateY(20px);
-  transition:opacity .6s, transform .6s;
-}
+.lp-quotes { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:60px; max-width:1100px; margin-left:auto; margin-right:auto; }
+.lp-quote { background:#0f1e33; border:1px solid rgba(255,255,255,.05); border-radius:16px; padding:28px; opacity:0; transform:translateY(20px); transition:opacity .6s, transform .6s; }
 .lp-quote.in-view { opacity:1; transform:translateY(0); }
 .lp-quote-mark { font-size:48px; color:rgba(201,168,76,.2); line-height:.8; margin-bottom:12px; font-family:'DM Serif Display',serif; }
 .lp-quote p { font-size:14px; color:rgba(245,240,232,.65); line-height:1.7; margin-bottom:20px; font-style:italic; }
@@ -305,42 +213,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .lp-quote-av { width:32px; height:32px; border-radius:50%; background:var(--navy-light); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--gold); }
 .lp-quote-name { font-size:13px; font-weight:500; color:var(--white); }
 .lp-quote-role { font-size:11px; color:rgba(245,240,232,.35); }
-
-/* CTA banner */
-.lp-cta-banner {
-  text-align:center; padding:100px 48px;
-  background:radial-gradient(ellipse at center, #152a50 0%, #0a1628 70%);
-  position:relative; overflow:hidden;
-}
-.lp-cta-banner::before {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at center, rgba(201,168,76,.06) 0%, transparent 60%);
-}
+.lp-cta-banner { text-align:center; padding:100px 48px; background:radial-gradient(ellipse at center, #152a50 0%, #0a1628 70%); position:relative; overflow:hidden; }
+.lp-cta-banner::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(201,168,76,.06) 0%, transparent 60%); }
 .lp-cta-banner-inner { position:relative; z-index:1; max-width:640px; margin:0 auto; }
-.lp-cta-banner h2 {
-  font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,52px);
-  color:var(--white); line-height:1.15; margin-bottom:16px;
-}
+.lp-cta-banner h2 { font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,52px); color:var(--white); line-height:1.15; margin-bottom:16px; }
 .lp-cta-banner h2 em { color:var(--gold); font-style:italic; }
 .lp-cta-banner p { font-size:17px; color:rgba(245,240,232,.5); margin-bottom:40px; }
-
-/* ── FOOTER ── */
-.lp-footer {
-  background:#060e1c; padding:40px 48px;
-  display:flex; align-items:center; justify-content:space-between;
-  border-top:1px solid rgba(255,255,255,.05); flex-wrap:wrap; gap:16px;
-}
+.lp-footer { background:#060e1c; padding:40px 48px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,.05); flex-wrap:wrap; gap:16px; }
 .lp-footer-copy { font-size:13px; color:rgba(245,240,232,.25); }
 .lp-footer-links { display:flex; gap:24px; }
 .lp-footer-link { font-size:13px; color:rgba(245,240,232,.3); cursor:pointer; transition:color .2s; }
 .lp-footer-link:hover { color:var(--gold); }
-
-/* Divider line */
 .lp-divider { height:1px; background:linear-gradient(90deg, transparent, rgba(201,168,76,.2), transparent); margin:0 48px; }
 
-/* ═══════════════════════════════════════════════
-   SHARED INNER VIEWS
-═══════════════════════════════════════════════ */
+/* SHARED INNER */
 .site-header{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.05);}
 .logo{display:flex;align-items:center;gap:12px;cursor:pointer;}
 .logo-mark{width:36px;height:36px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:16px;color:var(--navy);}
@@ -354,10 +240,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .user-avatar{width:26px;height:26px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--navy);}
 .user-chip span{font-size:13px;color:var(--cream);}
 
-/* inner pages have cream bg */
 #view-user-login,#view-submit,#view-admin-login,#view-admin{background:var(--cream);}
 
-.main-content{flex:1;padding:48px 2rem;max-width:680px;margin:0 auto;width:100%;}
+.main-content{flex:1;padding:48px 2rem;max-width:760px;margin:0 auto;width:100%;}
 .form-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
 .form-header{background:var(--navy);padding:28px 32px;display:flex;align-items:center;gap:16px;}
 .form-header-icon{width:48px;height:48px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;}
@@ -404,6 +289,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer;border:none;transition:all .2s;}
 .btn-primary{background:var(--gold);color:var(--navy);}
 .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-secondary{background:var(--cream);color:var(--text-dark);border:1px solid var(--cream-mid);}
+.btn-secondary:hover{background:var(--cream-mid);}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--white);padding:12px 20px;border-radius:var(--radius);font-size:14px;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:999;max-width:320px;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.error{background:var(--error);}
@@ -417,6 +304,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .tab-row{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--cream-mid);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:24px;}
 .tab-btn{padding:10px;font-family:inherit;font-size:13px;font-weight:500;border:none;background:var(--cream);color:var(--text-muted);cursor:pointer;transition:all .2s;}
 .tab-btn.active{background:var(--navy);color:var(--white);}
+
+/* ADMIN */
 .admin-layout{display:flex;flex:1;min-height:0;}
 .admin-sidebar{width:240px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;padding:24px 16px;}
 .sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:32px;}
@@ -451,7 +340,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .submissions-table td{padding:12px 16px;border-bottom:1px solid var(--cream-mid);vertical-align:middle;font-size:13px;color:var(--text-dark);}
 .submissions-table tr:last-child td{border-bottom:none;}
 .submissions-table tr:hover td{background:#fafaf8;}
-.msg-preview{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── FIXED: message column now wraps and shows 2 lines max with ellipsis ── */
+.msg-preview{
+  max-width:220px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  white-space:normal;
+  line-height:1.4;
+  font-size:13px;
+  color:var(--text-dark);
+}
+/* View full link next to preview */
+.view-full-link{
+  display:block;
+  font-size:11px;
+  color:var(--gold-dim);
+  cursor:pointer;
+  margin-top:3px;
+  text-decoration:underline;
+  white-space:nowrap;
+}
+.view-full-link:hover{color:var(--gold);}
+
 .submitter-cell{display:flex;align-items:center;gap:8px;}
 .sub-avatar{width:30px;height:30px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;}
 .sub-name{font-size:13px;font-weight:500;color:var(--text-dark);white-space:nowrap;}
@@ -469,18 +382,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .empty-state svg{width:48px;height:48px;color:var(--cream-dark);margin-bottom:16px;}
 .empty-state h3{font-size:16px;font-weight:500;color:var(--text-muted);margin-bottom:6px;}
 .empty-state p{font-size:13px;color:var(--text-light);}
+
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,.5);display:none;align-items:center;justify-content:center;z-index:500;padding:24px;}
 .modal-overlay.open{display:flex;}
-.modal-card{background:var(--white);border-radius:16px;width:100%;max-width:560px;box-shadow:var(--shadow-lg);overflow:hidden;}
-.modal-header{background:var(--navy);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;}
+.modal-card{background:var(--white);border-radius:16px;width:100%;max-width:580px;box-shadow:var(--shadow-lg);overflow:hidden;max-height:90vh;display:flex;flex-direction:column;}
+.modal-header{background:var(--navy);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .modal-header h3{font-family:'DM Serif Display',serif;color:var(--white);font-size:18px;font-weight:400;}
 .modal-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:var(--white);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
 .modal-close:hover{background:rgba(255,255,255,.2);}
-.modal-body{padding:24px;}
+.modal-body{padding:24px;overflow-y:auto;}
 .detail-row{display:flex;gap:8px;margin-bottom:16px;align-items:flex-start;}
-.detail-row label{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-light);min-width:100px;padding-top:2px;}
+.detail-row label{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-light);min-width:100px;padding-top:2px;flex-shrink:0;}
 .detail-row .detail-val{font-size:14px;color:var(--text-dark);flex:1;}
-.message-box{background:var(--cream);border-radius:var(--radius-sm);padding:14px 16px;font-size:14px;line-height:1.7;color:var(--text-dark);margin-top:4px;}
+
+/* ── FIXED: message box now scrollable and fully visible ── */
+.message-box{
+  background:var(--cream);border-radius:var(--radius-sm);
+  padding:16px 18px;font-size:14px;line-height:1.75;
+  color:var(--text-dark);margin-top:4px;
+  white-space:pre-wrap;word-break:break-word;
+  border:1px solid var(--cream-mid);
+  max-height:300px;overflow-y:auto;
+}
+
 .sp-block{display:flex;align-items:center;gap:14px;background:var(--cream);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;}
 .sp-avatar{width:48px;height:48px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--gold);flex-shrink:0;}
 .sp-name{font-size:16px;font-weight:600;color:var(--text-dark);}
@@ -493,6 +418,62 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 .uc-count{margin-left:auto;text-align:right;}
 .uc-count .num{font-size:22px;font-weight:300;color:var(--text-dark);}
 .uc-count .lbl{font-size:10px;color:var(--text-light);letter-spacing:.5px;}
+
+/* ══════════════════════════════════
+   USER HISTORY — NEW SECTION
+══════════════════════════════════ */
+.user-submit-area { display: flex; flex-direction: column; gap: 24px; }
+.user-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--cream-mid); margin-bottom: 28px; }
+.user-tab-btn {
+  background: none; border: none; font-family: inherit; font-size: 14px; font-weight: 500;
+  color: var(--text-muted); padding: 10px 20px; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s;
+}
+.user-tab-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+.user-tab-btn:hover:not(.active) { color: var(--text-dark); }
+.user-tab-panel { display: none; }
+.user-tab-panel.active { display: block; }
+
+/* History cards */
+.history-list { display: flex; flex-direction: column; gap: 14px; }
+.history-card {
+  background: var(--white); border-radius: 14px; border: 1px solid var(--cream-mid);
+  box-shadow: 0 2px 8px rgba(10,22,40,.05); overflow: hidden;
+  transition: box-shadow .2s, border-color .2s;
+}
+.history-card:hover { box-shadow: 0 4px 16px rgba(10,22,40,.1); border-color: var(--cream-dark); }
+.history-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--cream-mid); background: #faf8f4;
+}
+.history-card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.history-card-body { padding: 14px 18px; }
+.history-msg {
+  font-size: 13px; line-height: 1.65; color: var(--text-dark);
+  white-space: pre-wrap; word-break: break-word;
+}
+.history-ref { font-size: 11px; color: var(--text-light); font-family: monospace; margin-top: 8px; }
+.history-date { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+.history-category { font-size: 12px; color: var(--text-muted); background: var(--cream-mid); border-radius: 6px; padding: 2px 8px; }
+
+/* Status badge colours reused, plus user-facing status info */
+.status-info {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.status-info.new { color: #1a3a8f; }
+.status-info.review { color: #7b4f00; }
+.status-info.resolved { color: #276749; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.new { background: #4a77e8; }
+.status-dot.review { background: #f6a623; }
+.status-dot.resolved { background: #38a169; }
+
+.history-empty { text-align: center; padding: 48px 24px; }
+.history-empty svg { width: 44px; height: 44px; color: var(--cream-dark); margin: 0 auto 12px; }
+.history-empty h3 { font-size: 15px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+.history-empty p { font-size: 13px; color: var(--text-light); }
 
 @media(max-width:900px){
   .lp-nav{padding:0 24px;}
@@ -524,12 +505,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     VIEW: HOME — ANIMATED LANDING PAGE
-═══════════════════════════════════════════════════════════════ -->
+<!-- HOME -->
 <div id="view-home" class="view active">
-
-  <!-- NAV -->
   <nav class="lp-nav" id="lp-nav">
     <div class="lp-logo" onclick="showView('view-home')">
       <div class="lp-logo-mark">B</div>
@@ -542,30 +519,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
       <button class="lp-nav-cta" onclick="showView('view-user-login')">Sign In</button>
     </div>
   </nav>
-
-  <!-- HERO -->
   <section class="lp-hero">
     <div class="lp-grid"></div>
     <div class="lp-orb lp-orb-1"></div>
     <div class="lp-orb lp-orb-2"></div>
     <div class="lp-orb lp-orb-3"></div>
     <div class="lp-particles" id="lp-particles"></div>
-
     <div class="lp-hero-inner">
       <div class="lp-hero-badge">
         <div class="lp-hero-badge-dot"></div>
         <span>Secure &amp; Confidential Feedback System</span>
       </div>
-
       <h1 class="lp-hero-h1">
         Your voice<br>
         <em class="word-gold" id="typed-target"></em><span class="typed-cursor">|</span>
       </h1>
-
-      <p class="lp-hero-sub">
-        Submit complaints and compliments directly to BIIC management. Transparent, accountable, and designed for people who care about making things better.
-      </p>
-
+      <p class="lp-hero-sub">Submit complaints and compliments directly to BIIC management. Transparent, accountable, and designed for people who care about making things better.</p>
       <div class="lp-hero-ctas">
         <button class="lp-cta-primary" onclick="showView('view-user-login')">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -576,169 +545,99 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
           Learn More
         </button>
       </div>
-
       <div class="lp-stats">
-        <div class="lp-stat">
-          <div class="lp-stat-num"><span id="stat-n1">0</span>%</div>
-          <div class="lp-stat-label">Confidential</div>
-        </div>
+        <div class="lp-stat"><div class="lp-stat-num"><span id="stat-n1">0</span>%</div><div class="lp-stat-label">Confidential</div></div>
         <div class="lp-stat-div"></div>
-        <div class="lp-stat">
-          <div class="lp-stat-num"><span id="stat-n2">0</span>h</div>
-          <div class="lp-stat-label">Response Time</div>
-        </div>
+        <div class="lp-stat"><div class="lp-stat-num"><span id="stat-n2">0</span>h</div><div class="lp-stat-label">Response Time</div></div>
         <div class="lp-stat-div"></div>
-        <div class="lp-stat">
-          <div class="lp-stat-num"><span id="stat-n3">0</span>%</div>
-          <div class="lp-stat-label">Resolution Rate</div>
-        </div>
+        <div class="lp-stat"><div class="lp-stat-num"><span id="stat-n3">0</span>%</div><div class="lp-stat-label">Resolution Rate</div></div>
         <div class="lp-stat-div"></div>
-        <div class="lp-stat">
-          <div class="lp-stat-num"><span id="stat-n4">0</span>+</div>
-          <div class="lp-stat-label">Submissions Handled</div>
-        </div>
+        <div class="lp-stat"><div class="lp-stat-num"><span id="stat-n4">0</span>+</div><div class="lp-stat-label">Submissions Handled</div></div>
       </div>
     </div>
-
     <div class="lp-scroll-hint">
       <span>Scroll to explore</span>
       <svg class="lp-scroll-arrow" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="rgba(245,240,232,.3)" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section class="lp-section lp-section-mid" id="how-it-works">
     <div style="max-width:1100px;margin:0 auto;">
       <div class="lp-section-label">Process</div>
       <h2 class="lp-section-h2">Simple, <em>transparent</em> process</h2>
       <p class="lp-section-sub">Three steps between your experience and meaningful change inside BIIC.</p>
-
       <div class="lp-steps">
         <div class="lp-step" data-delay="0">
           <div class="lp-step-num">01</div>
-          <div class="lp-step-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
+          <div class="lp-step-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
           <h3>Sign In Securely</h3>
-          <p>Log in with your BIIC employee account. Registration takes under a minute. Your credentials are encrypted and stored safely.</p>
+          <p>Log in with your BIIC employee account. Registration takes under a minute.</p>
         </div>
         <div class="lp-step" data-delay="150">
           <div class="lp-step-num">02</div>
-          <div class="lp-step-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </div>
+          <div class="lp-step-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
           <h3>Submit Your Feedback</h3>
-          <p>Choose complaint or compliment, select a category, and write your message. Add as much or as little detail as you like.</p>
+          <p>Choose complaint or compliment, select a category, and write your message.</p>
         </div>
         <div class="lp-step" data-delay="300">
           <div class="lp-step-num">03</div>
-          <div class="lp-step-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
+          <div class="lp-step-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg></div>
           <h3>Admin Reviews &amp; Acts</h3>
-          <p>Management reviews every submission, updates its status, and takes appropriate action — all within a tracked, auditable workflow.</p>
+          <p>Management reviews every submission, updates its status, and takes appropriate action.</p>
         </div>
       </div>
     </div>
   </section>
-
   <div class="lp-divider"></div>
-
-  <!-- FEATURES -->
   <section class="lp-section lp-section-dark" id="features">
     <div style="max-width:1100px;margin:0 auto;">
       <div class="lp-section-label">Features</div>
       <h2 class="lp-section-h2">Built for <em>accountability</em></h2>
       <p class="lp-section-sub">Everything needed for a fair, functional internal feedback system.</p>
-
       <div class="lp-features">
         <div class="lp-feature" data-delay="0">
-          <div class="lp-feature-icon" style="background:rgba(201,168,76,.1);">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          </div>
-          <div>
-            <h3>Named &amp; Accountable</h3>
-            <p>Submissions are linked to your BIIC account so management can follow up appropriately. Your name is visible only to authorised admins.</p>
-          </div>
+          <div class="lp-feature-icon" style="background:rgba(201,168,76,.1);"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div><h3>Named &amp; Accountable</h3><p>Submissions are linked to your BIIC account so management can follow up appropriately.</p></div>
         </div>
         <div class="lp-feature" data-delay="100">
-          <div class="lp-feature-icon" style="background:rgba(56,161,105,.1);">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#38a169" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <h3>Admin-Only Visibility</h3>
-            <p>Submissions are never visible to other employees. Only authenticated administrators can access the dashboard and read feedback.</p>
-          </div>
+          <div class="lp-feature-icon" style="background:rgba(56,161,105,.1);"><svg fill="none" viewBox="0 0 24 24" stroke="#38a169" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><h3>Admin-Only Visibility</h3><p>Submissions are never visible to other employees. Only authenticated administrators can access the dashboard.</p></div>
         </div>
         <div class="lp-feature" data-delay="200">
-          <div class="lp-feature-icon" style="background:rgba(66,153,225,.1);">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#4299e1" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
-          <div>
-            <h3>Full Status Tracking</h3>
-            <p>Every submission moves through New → In Review → Resolved. Admins can update status inline and filter the dashboard by any criteria.</p>
-          </div>
+          <div class="lp-feature-icon" style="background:rgba(66,153,225,.1);"><svg fill="none" viewBox="0 0 24 24" stroke="#4299e1" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div><h3>Full Status Tracking</h3><p>Every submission moves through New → In Review → Resolved. Track your own submissions in real time.</p></div>
         </div>
         <div class="lp-feature" data-delay="300">
-          <div class="lp-feature-icon" style="background:rgba(237,137,54,.1);">
-            <svg fill="none" viewBox="0 0 24 24" stroke="#ed8936" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-          </div>
-          <div>
-            <h3>Categorised Submissions</h3>
-            <p>Filter by department, type, or status. Spot patterns — e.g. multiple IT complaints — and take systemic action before issues escalate.</p>
-          </div>
+          <div class="lp-feature-icon" style="background:rgba(237,137,54,.1);"><svg fill="none" viewBox="0 0 24 24" stroke="#ed8936" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+          <div><h3>Categorised Submissions</h3><p>Filter by department, type, or status. Spot patterns and take systemic action before issues escalate.</p></div>
         </div>
       </div>
     </div>
   </section>
-
   <div class="lp-divider"></div>
-
-  <!-- QUOTES -->
   <section class="lp-section lp-section-light">
     <div style="max-width:1100px;margin:0 auto;">
       <div class="lp-section-label">Culture</div>
       <h2 class="lp-section-h2">Why <em>feedback</em> matters</h2>
-
       <div class="lp-quotes">
         <div class="lp-quote" data-delay="0">
           <div class="lp-quote-mark">"</div>
           <p>A culture of feedback is a culture of improvement. When employees feel heard, they stay engaged and invested in the company's success.</p>
-          <div class="lp-quote-author">
-            <div class="lp-quote-av">SM</div>
-            <div>
-              <div class="lp-quote-name">Sarah Mokoena</div>
-              <div class="lp-quote-role">HR Manager, BIIC</div>
-            </div>
-          </div>
+          <div class="lp-quote-author"><div class="lp-quote-av">SM</div><div><div class="lp-quote-name">Sarah Mokoena</div><div class="lp-quote-role">HR Manager, BIIC</div></div></div>
         </div>
         <div class="lp-quote" data-delay="150">
           <div class="lp-quote-mark">"</div>
           <p>The ability to raise concerns safely, without fear of repercussion, is the foundation of psychological safety in any organisation.</p>
-          <div class="lp-quote-author">
-            <div class="lp-quote-av">JB</div>
-            <div>
-              <div class="lp-quote-name">James van der Berg</div>
-              <div class="lp-quote-role">IT Lead, BIIC</div>
-            </div>
-          </div>
+          <div class="lp-quote-author"><div class="lp-quote-av">JB</div><div><div class="lp-quote-name">James van der Berg</div><div class="lp-quote-role">IT Lead, BIIC</div></div></div>
         </div>
         <div class="lp-quote" data-delay="300">
           <div class="lp-quote-mark">"</div>
           <p>Recognising good work publicly motivates teams. A compliment submitted here reaches the people who can turn it into recognition.</p>
-          <div class="lp-quote-author">
-            <div class="lp-quote-av">ND</div>
-            <div>
-              <div class="lp-quote-name">Nomvula Dlamini</div>
-              <div class="lp-quote-role">Operations, BIIC</div>
-            </div>
-          </div>
+          <div class="lp-quote-author"><div class="lp-quote-av">ND</div><div><div class="lp-quote-name">Nomvula Dlamini</div><div class="lp-quote-role">Operations, BIIC</div></div></div>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- CTA BANNER -->
   <section class="lp-cta-banner">
     <div class="lp-cta-banner-inner reveal-el">
       <h2>Ready to make your<br><em>voice count?</em></h2>
@@ -755,8 +654,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
       </div>
     </div>
   </section>
-
-  <!-- FOOTER -->
   <footer class="lp-footer">
     <div>
       <div class="lp-logo" style="margin-bottom:8px;">
@@ -773,16 +670,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   </footer>
 </div>
 
-<!-- ═══ USER LOGIN / REGISTER ═══ -->
+<!-- USER LOGIN -->
 <div id="view-user-login" class="view">
   <header class="site-header">
-    <div class="logo" onclick="showView('view-home')">
-      <div class="logo-mark">B</div>
-      <span class="logo-text">BIIC <span>Portal</span></span>
-    </div>
-    <nav class="header-nav">
-      <button class="nav-btn" onclick="showView('view-home')">← Back</button>
-    </nav>
+    <div class="logo" onclick="showView('view-home')"><div class="logo-mark">B</div><span class="logo-text">BIIC <span>Portal</span></span></div>
+    <nav class="header-nav"><button class="nav-btn" onclick="showView('view-home')">← Back</button></nav>
   </header>
   <div class="login-wrap">
     <div class="login-card">
@@ -839,13 +731,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   </div>
 </div>
 
-<!-- ═══ SUBMIT FEEDBACK ═══ -->
+<!-- SUBMIT + HISTORY (user portal) -->
 <div id="view-submit" class="view">
   <header class="site-header">
-    <div class="logo" onclick="showView('view-home')">
-      <div class="logo-mark">B</div>
-      <span class="logo-text">BIIC <span>Portal</span></span>
-    </div>
+    <div class="logo" onclick="showView('view-home')"><div class="logo-mark">B</div><span class="logo-text">BIIC <span>Portal</span></span></div>
     <nav class="header-nav">
       <div class="user-chip">
         <div class="user-avatar" id="submit-avatar">?</div>
@@ -855,69 +744,102 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
     </nav>
   </header>
   <div class="main-content">
-    <div class="form-card">
-      <div class="form-header">
-        <div class="form-header-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
-        <div><h2>Submit Feedback</h2><p id="submit-greeting">Logged in</p></div>
-      </div>
-      <div class="form-body" id="fb-form-body">
-        <div class="anon-note">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <p>Your name is attached to this submission so management can follow up. Only authorised administrators can view submissions.</p>
+
+    <!-- Tab row: Submit / My History -->
+    <div class="user-tabs">
+      <button class="user-tab-btn active" id="utab-submit" onclick="switchUserTab('submit')">
+        ✏️ Submit Feedback
+      </button>
+      <button class="user-tab-btn" id="utab-history" onclick="switchUserTab('history')">
+        📋 My Submissions
+      </button>
+    </div>
+
+    <!-- SUBMIT PANEL -->
+    <div class="user-tab-panel active" id="upanel-submit">
+      <div class="form-card">
+        <div class="form-header">
+          <div class="form-header-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#c9a84c" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          <div><h2>Submit Feedback</h2><p id="submit-greeting">Logged in</p></div>
         </div>
-        <div class="type-toggle">
-          <div class="type-option">
-            <input type="radio" name="fbtype" id="type-complaint" value="complaint" checked>
-            <label for="type-complaint" class="type-label">
-              <svg fill="none" viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span class="type-label-text">Complaint</span>
-            </label>
+        <div class="form-body" id="fb-form-body">
+          <div class="anon-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Your name is attached to this submission so management can follow up. Only authorised administrators can view submissions.</p>
           </div>
-          <div class="type-option">
-            <input type="radio" name="fbtype" id="type-compliment" value="compliment">
-            <label for="type-compliment" class="type-label">
-              <svg fill="none" viewBox="0 0 24 24" stroke="#38a169" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span class="type-label-text">Compliment</span>
-            </label>
+          <div class="type-toggle">
+            <div class="type-option">
+              <input type="radio" name="fbtype" id="type-complaint" value="complaint" checked>
+              <label for="type-complaint" class="type-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#e53e3e" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span class="type-label-text">Complaint</span>
+              </label>
+            </div>
+            <div class="type-option">
+              <input type="radio" name="fbtype" id="type-compliment" value="compliment">
+              <label for="type-compliment" class="type-label">
+                <svg fill="none" viewBox="0 0 24 24" stroke="#38a169" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span class="type-label-text">Compliment</span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fb-category">Category <span class="opt">(optional)</span></label>
+            <select id="fb-category">
+              <option value="">Select a category...</option>
+              <option>Management</option><option>HR / People</option><option>Facilities</option>
+              <option>IT / Systems</option><option>Safety</option><option>Communication</option>
+              <option>Customer Service</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fb-message">Message <span style="color:var(--gold-dim)">*</span></label>
+            <textarea id="fb-message" placeholder="Describe your feedback in detail..." maxlength="1000" oninput="document.getElementById('char-count').textContent=this.value.length"></textarea>
+            <div class="char-count"><span id="char-count">0</span> / 1000</div>
+          </div>
+          <button class="submit-btn" onclick="submitFeedback()" id="fb-submit-btn">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Submit Feedback
+          </button>
+        </div>
+        <div class="success-state" id="fb-success">
+          <div class="success-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3>Feedback Received</h3>
+          <p>Thank you. Your submission has been recorded and will be reviewed by the BIIC management team.</p>
+          <div class="ref-badge">Reference: <strong id="fb-ref-id"></strong></div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="resetFbForm()">Submit Another</button>
+            <button class="btn btn-secondary" onclick="switchUserTab('history')">View My Submissions</button>
           </div>
         </div>
-        <div class="field">
-          <label for="fb-category">Category <span class="opt">(optional)</span></label>
-          <select id="fb-category">
-            <option value="">Select a category...</option>
-            <option>Management</option><option>HR / People</option><option>Facilities</option>
-            <option>IT / Systems</option><option>Safety</option><option>Communication</option>
-            <option>Customer Service</option><option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="fb-message">Message <span style="color:var(--gold-dim)">*</span></label>
-          <textarea id="fb-message" placeholder="Describe your feedback in detail..." maxlength="1000" oninput="document.getElementById('char-count').textContent=this.value.length"></textarea>
-          <div class="char-count"><span id="char-count">0</span> / 1000</div>
-        </div>
-        <button class="submit-btn" onclick="submitFeedback()" id="fb-submit-btn">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          Submit Feedback
-        </button>
-      </div>
-      <div class="success-state" id="fb-success">
-        <div class="success-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <h3>Feedback Received</h3>
-        <p>Thank you. Your submission has been recorded and will be reviewed by the BIIC management team.</p>
-        <div class="ref-badge">Reference: <strong id="fb-ref-id"></strong></div>
-        <button class="btn btn-primary" onclick="resetFbForm()">Submit Another</button>
       </div>
     </div>
+
+    <!-- HISTORY PANEL -->
+    <div class="user-tab-panel" id="upanel-history">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h2 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;color:var(--text-dark);">My Submissions</h2>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:2px;">Track the status of your complaints and compliments</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="hist-filter" onchange="renderHistory()" style="border:1px solid var(--cream-mid);border-radius:8px;padding:7px 28px 7px 10px;font-family:inherit;font-size:13px;background:var(--white);appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27 viewBox=%270 0 10 6%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 stroke=%27%234a5568%27 stroke-width=%271.5%27 fill=%27none%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;">
+            <option value="">All Types</option>
+            <option value="complaint">Complaints Only</option>
+            <option value="compliment">Compliments Only</option>
+          </select>
+        </div>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+
   </div>
 </div>
 
-<!-- ═══ ADMIN LOGIN ═══ -->
+<!-- ADMIN LOGIN -->
 <div id="view-admin-login" class="view">
   <header class="site-header">
-    <div class="logo" onclick="showView('view-home')">
-      <div class="logo-mark">B</div>
-      <span class="logo-text">BIIC <span>Portal</span></span>
-    </div>
+    <div class="logo" onclick="showView('view-home')"><div class="logo-mark">B</div><span class="logo-text">BIIC <span>Portal</span></span></div>
     <nav class="header-nav"><button class="nav-btn" onclick="showView('view-home')">← Back</button></nav>
   </header>
   <div class="login-wrap">
@@ -941,7 +863,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   </div>
 </div>
 
-<!-- ═══ ADMIN DASHBOARD ═══ -->
+<!-- ADMIN DASHBOARD -->
 <div id="view-admin" class="view">
   <header class="site-header">
     <div class="logo"><div class="logo-mark">B</div><span class="logo-text">BIIC <span>Admin</span></span></div>
@@ -1039,103 +961,85 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text-da
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL — full message detail -->
 <div class="modal-overlay" id="detail-modal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card">
-    <div class="modal-header"><h3>Submission Detail</h3><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-header">
+      <h3>Submission Detail</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-/* ════════════════════════════════════
-   LANDING PAGE ANIMATIONS
-════════════════════════════════════ */
-
-// Navbar scroll effect
+/* ══ LANDING ANIMATIONS ══ */
 window.addEventListener('scroll', () => {
   document.getElementById('lp-nav').classList.toggle('scrolled', window.scrollY > 40);
 }, { passive:true });
 
-// Generate particles
 (function spawnParticles(){
-  const container = document.getElementById('lp-particles');
-  if(!container) return;
+  const c = document.getElementById('lp-particles'); if(!c) return;
   for(let i=0;i<28;i++){
-    const p = document.createElement('div');
-    p.className = 'lp-particle';
-    p.style.cssText = `
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      animation-delay:${Math.random()*4}s;
-      animation-duration:${3+Math.random()*4}s;
-      opacity:0;
-    `;
-    container.appendChild(p);
+    const p=document.createElement('div'); p.className='lp-particle';
+    p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${3+Math.random()*4}s;opacity:0;`;
+    c.appendChild(p);
   }
 })();
 
-// Typewriter
 (function typewriter(){
-  const el = document.getElementById('typed-target');
-  if(!el) return;
-  const phrases = ['deserves to be heard.', 'shapes our culture.', 'drives real change.', 'matters to BIIC.'];
-  let pi=0, ci=0, deleting=false, pause=0;
+  const el=document.getElementById('typed-target'); if(!el) return;
+  const phrases=['deserves to be heard.','shapes our culture.','drives real change.','matters to BIIC.'];
+  let pi=0,ci=0,deleting=false,pause=0;
   function tick(){
     if(pause>0){pause--;setTimeout(tick,50);return;}
-    const phrase = phrases[pi];
+    const phrase=phrases[pi];
     if(!deleting){
-      el.textContent = phrase.slice(0, ++ci);
+      el.textContent=phrase.slice(0,++ci);
       if(ci===phrase.length){pause=60;deleting=true;}
-      setTimeout(tick, 55);
+      setTimeout(tick,55);
     } else {
-      el.textContent = phrase.slice(0, --ci);
+      el.textContent=phrase.slice(0,--ci);
       if(ci===0){deleting=false;pi=(pi+1)%phrases.length;pause=12;}
-      setTimeout(tick, 30);
+      setTimeout(tick,30);
     }
   }
-  setTimeout(tick, 1200);
+  setTimeout(tick,1200);
 })();
 
-// Counter animation
-function animateCounter(id, target, suffix, duration){
-  const el = document.getElementById(id);
-  if(!el) return;
+function animateCounter(id,target,duration){
+  const el=document.getElementById(id); if(!el) return;
   let start=null;
   function step(ts){
-    if(!start) start=ts;
-    const p = Math.min((ts-start)/duration, 1);
-    const ease = 1-Math.pow(1-p,3);
-    el.textContent = Math.round(ease*target);
-    if(p<1) requestAnimationFrame(step);
-    else el.textContent = target;
+    if(!start)start=ts;
+    const p=Math.min((ts-start)/duration,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(ease*target);
+    if(p<1)requestAnimationFrame(step); else el.textContent=target;
   }
   requestAnimationFrame(step);
 }
-// Start counters after load
 setTimeout(()=>{
-  animateCounter('stat-n1', 100, '%', 1800);
-  animateCounter('stat-n2', 24, 'h', 1600);
-  animateCounter('stat-n3', 94, '%', 2000);
-  animateCounter('stat-n4', 500, '+', 2200);
-}, 1000);
+  animateCounter('stat-n1',100,1800);
+  animateCounter('stat-n2',24,1600);
+  animateCounter('stat-n3',94,2000);
+  animateCounter('stat-n4',500,2200);
+},1000);
 
-// Scroll reveal — IntersectionObserver
-const revealObserver = new IntersectionObserver((entries)=>{
+const revealObserver=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
-      const delay = e.target.dataset.delay || 0;
-      setTimeout(()=> e.target.classList.add('in-view'), parseInt(delay));
+      const delay=e.target.dataset.delay||0;
+      setTimeout(()=>e.target.classList.add('in-view'),parseInt(delay));
       revealObserver.unobserve(e.target);
     }
   });
 },{threshold:0.12});
 document.querySelectorAll('.lp-step,.lp-feature,.lp-quote,.reveal-el').forEach(el=>revealObserver.observe(el));
 
-/* ════════════════════════════════════
-   APP LOGIC
-════════════════════════════════════ */
+/* ══ DATA ══ */
 const SUBS_KEY='biic_submissions', USERS_KEY='biic_users';
 const ADMIN_CREDS={username:'admin',password:'biic2025'};
 let currentUser=null, adminLoggedIn=false;
@@ -1157,14 +1061,15 @@ function seedDemoData(){
   }
   if(!getSubs().length){
     saveSubs([
-      {id:genRef(),type:'complaint',category:'Facilities',message:'The air conditioning in the open-plan office has been broken for two weeks. The temperature is very uncomfortable in the afternoons and is noticeably affecting productivity.',status:'in review',date:new Date(Date.now()-4*86400000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
+      {id:genRef(),type:'complaint',category:'Facilities',message:'The air conditioning in the open-plan office has been broken for two weeks. The temperature is very uncomfortable in the afternoons and is noticeably affecting productivity. Several colleagues have raised this informally but nothing has been done. We would appreciate urgent attention to this matter.',status:'in review',date:new Date(Date.now()-4*86400000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
       {id:genRef(),type:'compliment',category:'Management',message:'I want to acknowledge how our team lead handled the recent project deadline extension. The communication was clear, empathetic, and made a stressful situation very manageable. Truly excellent leadership.',status:'resolved',date:new Date(Date.now()-2*86400000).toISOString(),submitterId:'u2',submitterName:'James van der Berg',submitterEmail:'j.vdberg@biic.co.za',submitterDept:'IT'},
-      {id:genRef(),type:'complaint',category:'IT / Systems',message:'The VPN connectivity has been unstable for remote workers over the past month. Constant disconnections during video calls are making effective collaboration very difficult.',status:'new',date:new Date(Date.now()-86400000).toISOString(),submitterId:'u3',submitterName:'Nomvula Dlamini',submitterEmail:'n.dlamini@biic.co.za',submitterDept:'Operations'},
-      {id:genRef(),type:'compliment',category:'Customer Service',message:'The support team went above and beyond during our client visit. They were professional, well-prepared, and represented BIIC exceptionally well. Our client was very impressed.',status:'new',date:new Date(Date.now()-3600000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
+      {id:genRef(),type:'complaint',category:'IT / Systems',message:'The VPN connectivity has been unstable for remote workers over the past month. Constant disconnections during video calls are making effective collaboration very difficult. We have logged tickets but the issue keeps recurring.',status:'new',date:new Date(Date.now()-86400000).toISOString(),submitterId:'u3',submitterName:'Nomvula Dlamini',submitterEmail:'n.dlamini@biic.co.za',submitterDept:'Operations'},
+      {id:genRef(),type:'compliment',category:'Customer Service',message:'The support team went above and beyond during our client visit. They were professional, well-prepared, and represented BIIC exceptionally well. Our client was very impressed with the level of service provided.',status:'new',date:new Date(Date.now()-3600000).toISOString(),submitterId:'u1',submitterName:'Sarah Mokoena',submitterEmail:'s.mokoena@biic.co.za',submitterDept:'Human Resources'},
     ]);
   }
 }
 
+/* ══ NAVIGATION ══ */
 function showView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1181,6 +1086,16 @@ function switchTab(tab){
   document.getElementById('reg-error').style.display='none';
 }
 
+/* ── NEW: user tab switch ── */
+function switchUserTab(tab){
+  document.getElementById('upanel-submit').classList.toggle('active', tab==='submit');
+  document.getElementById('upanel-history').classList.toggle('active', tab==='history');
+  document.getElementById('utab-submit').classList.toggle('active', tab==='submit');
+  document.getElementById('utab-history').classList.toggle('active', tab==='history');
+  if(tab==='history') renderHistory();
+}
+
+/* ══ USER AUTH ══ */
 function doUserLogin(){
   const email=document.getElementById('si-email').value.trim().toLowerCase();
   const pass=document.getElementById('si-pass').value;
@@ -1214,9 +1129,12 @@ function loadSubmitView(){
   document.getElementById('submit-avatar').textContent=initials(name);
   document.getElementById('submit-name').textContent=currentUser.firstName;
   document.getElementById('submit-greeting').textContent='Logged in as '+name+(currentUser.dept?' · '+currentUser.dept:'');
-  resetFbForm();showView('view-submit');
+  resetFbForm();
+  switchUserTab('submit');
+  showView('view-submit');
 }
 
+/* ══ SUBMIT FEEDBACK ══ */
 function submitFeedback(){
   if(!currentUser){showToast('Please sign in first.',true);return;}
   const type=document.querySelector('input[name="fbtype"]:checked').value;
@@ -1250,6 +1168,67 @@ function resetFbForm(){
   document.getElementById('fb-success').style.display='none';
 }
 
+/* ══ USER HISTORY ══ */
+function renderHistory(){
+  if(!currentUser) return;
+  const filter=document.getElementById('hist-filter').value;
+  const subs=getSubs().filter(s=>s.submitterId===currentUser.id);
+  const filtered=filter ? subs.filter(s=>s.type===filter) : subs;
+  const list=document.getElementById('history-list');
+
+  if(!filtered.length){
+    list.innerHTML=`<div class="history-empty">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      <h3>No submissions yet</h3>
+      <p>${filter ? 'No '+filter+'s found.' : 'You haven\'t submitted any feedback yet.'} <a href="#" onclick="switchUserTab('submit');return false;" style="color:var(--gold-dim);font-weight:500;">Submit your first one →</a></p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(s => {
+    const date = new Date(s.date).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});
+    const time = new Date(s.date).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+
+    const typeBadge = s.type==='complaint'
+      ? `<span class="badge badge-complaint"><span class="badge-dot"></span>Complaint</span>`
+      : `<span class="badge badge-compliment"><span class="badge-dot"></span>Compliment</span>`;
+
+    let statusCls, statusDotCls, statusLabel, statusDesc;
+    if(s.status==='new'){
+      statusCls='new'; statusDotCls='new'; statusLabel='New';
+      statusDesc='Your submission has been received and is awaiting review.';
+    } else if(s.status==='in review'){
+      statusCls='review'; statusDotCls='review'; statusLabel='In Review';
+      statusDesc='Management is currently reviewing your submission.';
+    } else {
+      statusCls='resolved'; statusDotCls='resolved'; statusLabel='Resolved';
+      statusDesc='This submission has been reviewed and resolved.';
+    }
+
+    return `<div class="history-card">
+      <div class="history-card-header">
+        <div class="history-card-meta">
+          ${typeBadge}
+          ${s.category ? `<span class="history-category">${escHtml(s.category)}</span>` : ''}
+          <span class="history-date">${date} at ${time}</span>
+        </div>
+        <div class="status-info ${statusCls}">
+          <span class="status-dot ${statusDotCls}"></span>
+          ${statusLabel}
+        </div>
+      </div>
+      <div class="history-card-body">
+        <div class="history-msg">${escHtml(s.message)}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:8px;">
+          <div class="history-ref">Ref: ${s.id}</div>
+          <div style="font-size:12px;color:var(--text-light);font-style:italic;">${escHtml(statusDesc)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ ADMIN AUTH ══ */
 function doAdminLogin(){
   const u=document.getElementById('admin-user').value.trim();
   const p=document.getElementById('admin-pass').value;
@@ -1260,6 +1239,7 @@ function doAdminLogin(){
 }
 function doAdminLogout(){adminLoggedIn=false;document.getElementById('admin-user').value='';document.getElementById('admin-pass').value='';showView('view-home');}
 
+/* ══ ADMIN VIEWS ══ */
 function filterView(filter,btn){
   document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -1267,14 +1247,14 @@ function filterView(filter,btn){
   document.getElementById('panel-submissions').style.display=isUsers?'none':'block';
   document.getElementById('panel-users').style.display=isUsers?'block':'none';
   const T={all:'All Submissions',complaint:'Complaints',compliment:'Compliments',new:'New Submissions','in review':'In Review',resolved:'Resolved',users:'Registered Users'};
-  const S={all:'All feedback with submitter names',complaint:'Submissions marked as complaints',compliment:'Submissions marked as compliments',new:'Awaiting initial review','in review':'Currently being investigated',resolved:'Closed submissions',users:'All employees registered on the portal'};
+  const S={all:'Showing all feedback with submitter names',complaint:'Submissions marked as complaints',compliment:'Submissions marked as compliments',new:'Awaiting initial review','in review':'Currently being investigated',resolved:'Closed submissions',users:'All employees registered on the portal'};
   document.getElementById('admin-view-title').textContent=T[filter]||'Submissions';
   document.getElementById('admin-view-sub').textContent=S[filter]||'';
   if(!isUsers){
     document.getElementById('filter-type').value=(filter==='complaint'||filter==='compliment')?filter:'';
     document.getElementById('filter-status').value=(filter==='new'||filter==='in review'||filter==='resolved')?filter:'';
     renderTable();
-  }else renderUsers();
+  } else renderUsers();
 }
 
 function updateAdminBadges(){
@@ -1297,6 +1277,7 @@ function updateAdminBadges(){
   document.getElementById('s-pending').textContent=nw+rv;
 }
 
+/* ══ ADMIN TABLE — with "View Full" link ══ */
 function renderTable(){
   if(!adminLoggedIn)return;
   updateAdminBadges();
@@ -1329,7 +1310,10 @@ function renderTable(){
       <td><div class="submitter-cell"><div class="sub-avatar">${escHtml(av)}</div><div><div class="sub-name">${escHtml(name)}</div><div class="sub-meta">${escHtml(d.submitterEmail||'')}${d.submitterDept?' · '+escHtml(d.submitterDept):''}</div></div></div></td>
       <td>${tb}</td>
       <td style="font-size:12px;color:var(--text-muted)">${escHtml(d.category||'—')}</td>
-      <td><div class="msg-preview">${escHtml(d.message)}</div></td>
+      <td>
+        <div class="msg-preview">${escHtml(d.message)}</div>
+        <span class="view-full-link" onclick="openDetail('${d.id}')">View full message →</span>
+      </td>
       <td style="font-size:12px;color:var(--text-muted);white-space:nowrap">${date}<br>${time}</td>
       <td><span class="badge ${scls}"><span class="badge-dot"></span>${d.status}</span></td>
       <td style="white-space:nowrap">
@@ -1363,24 +1347,37 @@ function updateStatus(id,newStatus){
   if(item){item.status=newStatus;saveSubs(subs);showToast('Status updated to "'+newStatus+'"');renderTable();}
 }
 
+/* ══ MODAL — full message displayed ══ */
 function openDetail(id){
-  const d=getSubs().find(x=>x.id===id);if(!d)return;
+  const d=getSubs().find(x=>x.id===id); if(!d) return;
   const date=new Date(d.date).toLocaleString('en-ZA');
   const name=d.submitterName||'Unknown';
-  const tb=d.type==='complaint'?`<span class="badge badge-complaint">Complaint</span>`:`<span class="badge badge-compliment">Compliment</span>`;
+  const tb=d.type==='complaint'
+    ?`<span class="badge badge-complaint">Complaint</span>`
+    :`<span class="badge badge-compliment">Compliment</span>`;
   document.getElementById('modal-body').innerHTML=`
-    <div class="sp-block"><div class="sp-avatar">${escHtml(initials(name))}</div><div><div class="sp-name">${escHtml(name)}</div><div class="sp-sub">${escHtml(d.submitterEmail||'')}${d.submitterDept?' &middot; '+escHtml(d.submitterDept):''}</div></div></div>
-    <div class="detail-row"><label>Reference</label><div class="detail-val" style="font-family:monospace;font-size:12px">${d.id}</div></div>
+    <div class="sp-block">
+      <div class="sp-avatar">${escHtml(initials(name))}</div>
+      <div>
+        <div class="sp-name">${escHtml(name)}</div>
+        <div class="sp-sub">${escHtml(d.submitterEmail||'')}${d.submitterDept?' &middot; '+escHtml(d.submitterDept):''}</div>
+      </div>
+    </div>
+    <div class="detail-row"><label>Reference</label><div class="detail-val" style="font-family:monospace;font-size:12px">${escHtml(d.id)}</div></div>
     <div class="detail-row"><label>Type</label><div class="detail-val">${tb}</div></div>
     <div class="detail-row"><label>Category</label><div class="detail-val">${escHtml(d.category||'—')}</div></div>
-    <div class="detail-row"><label>Submitted</label><div class="detail-val">${date}</div></div>
+    <div class="detail-row"><label>Submitted</label><div class="detail-val">${escHtml(date)}</div></div>
     <div class="detail-row"><label>Status</label><div class="detail-val">
       <select class="status-sel" onchange="updateStatus('${d.id}',this.value);closeModal()">
         <option ${d.status==='new'?'selected':''} value="new">New</option>
         <option ${d.status==='in review'?'selected':''} value="in review">In Review</option>
         <option ${d.status==='resolved'?'selected':''} value="resolved">Resolved</option>
-      </select></div></div>
-    <div class="detail-row" style="flex-direction:column;gap:8px"><label>Message</label><div class="message-box">${escHtml(d.message)}</div></div>`;
+      </select>
+    </div></div>
+    <div class="detail-row" style="flex-direction:column;gap:8px;">
+      <label>Full Message</label>
+      <div class="message-box">${escHtml(d.message)}</div>
+    </div>`;
   document.getElementById('detail-modal').classList.add('open');
 }
 
