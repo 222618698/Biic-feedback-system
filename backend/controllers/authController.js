@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 const db     = require('../config/db');
 
-const ALLOWED_DOMAIN = process.env.ALLOWED_EMAIL_DOMAIN || 'pillar5group.co.za';
-
 const signToken = (user) =>
   jwt.sign(
     { id: user.id, email: user.email, role: user.role },
@@ -15,21 +13,18 @@ const signToken = (user) =>
 // ── POST /api/auth/register ──────────────────────────────────
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, empNo, departmentId } = req.body;
+    const { firstName, lastName, email, password, empNumber, departmentId } = req.body;
 
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ success: false, message: 'All required fields must be provided.' });
     }
 
-    // Enforce company email domain
-    if (!email.toLowerCase().endsWith(`@${ALLOWED_DOMAIN}`)) {
-      return res.status(400).json({
-        success: false,
-        message: `You must use a @${ALLOWED_DOMAIN} email address to register.`
-      });
+    // Enforce Pillar 5 Group email domain
+    if (!email.toLowerCase().endsWith('@pillar5group.co.za')) {
+      return res.status(400).json({ success: false, message: 'You must use a @pillar5group.co.za email address to register.' });
     }
 
-    if (!empNo || !empNo.trim()) {
+    if (!empNumber || !empNumber.trim()) {
       return res.status(400).json({ success: false, message: 'Employee or contract number is required.' });
     }
 
@@ -43,24 +38,25 @@ exports.register = async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+
     const [result] = await db.query(
-      `INSERT INTO users (first_name, last_name, email, password_hash, emp_no, department_id, role)
+      `INSERT INTO users (first_name, last_name, email, password_hash, emp_number, department_id, role)
        VALUES (?, ?, ?, ?, ?, ?, 'user')`,
-      [firstName.trim(), lastName.trim(), email.toLowerCase().trim(), passwordHash, empNo.trim(), departmentId || null]
+      [firstName.trim(), lastName.trim(), email.toLowerCase().trim(), passwordHash, empNumber.trim(), departmentId || null]
     );
 
     const newUser = { id: result.insertId, email: email.toLowerCase(), role: 'user' };
 
     res.status(201).json({
-      success:  true,
-      message:  'Account created successfully.',
-      token:    signToken(newUser),
+      success: true,
+      message: 'Account created successfully.',
+      token:   signToken(newUser),
       user: {
         id:           result.insertId,
         firstName:    firstName.trim(),
         lastName:     lastName.trim(),
         email:        email.toLowerCase(),
-        empNo:        empNo.trim(),
+        empNumber:    empNumber.trim(),
         departmentId: departmentId || null,
         role:         'user',
       },
@@ -81,7 +77,7 @@ exports.login = async (req, res) => {
 
     const [rows] = await db.query(
       `SELECT u.id, u.first_name, u.last_name, u.email, u.password_hash,
-              u.role, u.emp_no, u.department_id, d.dept_name
+              u.role, u.emp_number, u.department_id, d.dept_name
        FROM   users u
        LEFT   JOIN departments d ON d.id = u.department_id
        WHERE  u.email = ?`,
@@ -106,8 +102,8 @@ exports.login = async (req, res) => {
         firstName:    user.first_name,
         lastName:     user.last_name,
         email:        user.email,
-        empNo:        user.emp_no,
         role:         user.role,
+        empNumber:    user.emp_number,
         departmentId: user.department_id,
         department:   user.dept_name,
       },
@@ -123,7 +119,7 @@ exports.getMe = async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT u.id, u.first_name, u.last_name, u.email, u.role,
-              u.emp_no, u.department_id, d.dept_name, u.created_at
+              u.emp_number, u.department_id, d.dept_name, u.created_at
        FROM   users u
        LEFT   JOIN departments d ON d.id = u.department_id
        WHERE  u.id = ?`,
@@ -134,17 +130,12 @@ exports.getMe = async (req, res) => {
     res.json({
       success: true,
       user: {
-        id:         u.id,
-        firstName:  u.first_name,
-        lastName:   u.last_name,
-        email:      u.email,
-        empNo:      u.emp_no,
-        role:       u.role,
-        department: u.dept_name,
-        createdAt:  u.created_at,
+        id: u.id, firstName: u.first_name, lastName: u.last_name,
+        email: u.email, role: u.role, empNumber: u.emp_number,
+        department: u.dept_name, createdAt: u.created_at,
       },
     });
-  } catch (err) {
+  } catch {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };

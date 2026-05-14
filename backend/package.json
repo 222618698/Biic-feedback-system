@@ -1,7 +1,7 @@
 {
-  "name": "biic-feedback-backend",
-  "version": "1.0.0",
-  "description": "BIIC Feedback Portal — Express/MySQL API",
+  "name": "p5-feedback-backend",
+  "version": "2.0.0",
+  "description": "Pillar 5 Group Feedback Portal — Express/MySQL API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -12,9 +12,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
-    "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.9.4"
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.9.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
