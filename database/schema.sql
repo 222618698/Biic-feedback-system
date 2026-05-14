@@ -1,10 +1,10 @@
 -- ============================================================
---  Pillar 5 Group Feedback Portal — MySQL Schema (v2)
---  Run: mysql -u root -p < schema.sql
+--  Pillar 5 Group — Feedback Portal MySQL Schema (Updated)
+--  Run in MySQL Workbench: SOURCE schema.sql;
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS pillar5_feedback CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE pillar5_feedback;
+CREATE DATABASE IF NOT EXISTS p5_feedback CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE p5_feedback;
 
 -- ── 1. Departments ───────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS departments (
@@ -21,14 +21,13 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 -- ── 3. Users ─────────────────────────────────────────────────
--- emp_no: employee number or contract number (e.g. EMP-00142 / CON-2024-017)
 CREATE TABLE IF NOT EXISTS users (
   id            INT AUTO_INCREMENT PRIMARY KEY,
   first_name    VARCHAR(80)  NOT NULL,
   last_name     VARCHAR(80)  NOT NULL,
   email         VARCHAR(150) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
-  emp_no        VARCHAR(50)  NULL,           -- employee / contract number
+  emp_number    VARCHAR(50)  NULL,          -- employee / contract number
   department_id INT          NULL,
   role          ENUM('user','admin') NOT NULL DEFAULT 'user',
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -39,7 +38,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- ── 4. Feedback ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS feedback (
   id            INT AUTO_INCREMENT PRIMARY KEY,
-  reference_num VARCHAR(30)  NOT NULL UNIQUE,
+  reference_num VARCHAR(30) NOT NULL UNIQUE,
   type          ENUM('complaint','compliment') NOT NULL,
   category_id   INT  NULL,
   message       TEXT NOT NULL,
@@ -54,14 +53,14 @@ CREATE TABLE IF NOT EXISTS feedback (
 );
 
 -- ── 5. Proof Files ───────────────────────────────────────────
--- Stores file metadata + base64 data for uploaded proof attachments
--- In production: replace `file_data` with a file path / S3 URL
+-- Stores file metadata; actual file saved to disk via multer
 CREATE TABLE IF NOT EXISTS proof_files (
   id          INT AUTO_INCREMENT PRIMARY KEY,
-  feedback_id INT          NOT NULL,
+  feedback_id INT NOT NULL,
   file_name   VARCHAR(255) NOT NULL,
-  file_type   VARCHAR(100) NOT NULL,   -- e.g. image/jpeg, application/pdf
-  file_data   LONGTEXT     NOT NULL,   -- base64-encoded file content
+  file_path   VARCHAR(500) NOT NULL,   -- server path: uploads/proofs/<uuid>_filename
+  mime_type   VARCHAR(100) NOT NULL,
+  file_size   INT          NOT NULL,   -- bytes
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_proof_feedback FOREIGN KEY (feedback_id)
     REFERENCES feedback(id) ON DELETE CASCADE
