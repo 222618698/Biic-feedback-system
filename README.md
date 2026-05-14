@@ -245,3 +245,101 @@ After running seed.sql:
 
 **Port already in use**
 - Change `PORT=5001` in `.env` and update `"proxy"` in `frontend/package.json`
+
+# Pillar 5 Group — Feedback Portal UPDATE GUIDE
+
+## What Changed in This Update
+
+| Feature                     | Where               |
+|-----------------------------|---------------------|
+| Company rebranded → Pillar 5 Group | All files     |
+| @pillar5group.co.za email enforced | Register + backend |
+| Employee/contract number required  | Register + backend |
+| Proof file uploads (5 files max)   | Submit form + backend |
+| "My Submissions" tab for users     | SubmitPage.jsx      |
+| Status tracking visible to users   | SubmitPage.jsx      |
+| Image lightbox for proof previews  | SubmitPage.jsx      |
+| New database: p5_feedback          | schema.sql + .env   |
+| proof_files table added            | schema.sql          |
+| multer middleware added             | backend             |
+
+---
+
+## How to Apply This Update
+
+### Step 1 — Update Database
+
+In MySQL Workbench, run the new schema:
+```sql
+SOURCE C:\path\to\p5-update\database\schema.sql;
+SOURCE C:\path\to\p5-update\database\seed.sql;
+```
+
+### Step 2 — Replace Backend Files
+
+Copy these files into your `backend/` folder, replacing the old ones:
+
+```
+p5-update/backend/
+├── package.json              → backend/package.json
+├── server.js                 → backend/server.js
+├── .env.example              → backend/.env.example
+├── config/db.js              → backend/config/db.js
+├── middleware/auth.js        → backend/middleware/auth.js
+├── middleware/upload.js      → backend/middleware/upload.js   (NEW)
+├── controllers/authController.js     → backend/controllers/
+├── controllers/feedbackController.js → backend/controllers/
+└── routes/feedback.js        → backend/routes/
+```
+
+### Step 3 — Update your .env
+
+```env
+DB_NAME=p5_feedback
+UPLOAD_DIR=uploads/proofs
+MAX_FILE_SIZE_MB=10
+```
+
+### Step 4 — Install new backend dependency
+
+```powershell
+cd backend
+npm install
+```
+This adds `multer` and `uuid`.
+
+### Step 5 — Replace Frontend Files
+
+Copy into your `frontend/src/` folder:
+
+```
+p5-update/frontend/src/
+├── services/api.js           → frontend/src/services/api.js
+├── services/AuthContext.js   → frontend/src/services/AuthContext.js
+├── views/RegisterPage.jsx    → frontend/src/views/RegisterPage.jsx
+└── views/SubmitPage.jsx      → frontend/src/views/SubmitPage.jsx
+```
+
+### Step 6 — Restart both servers
+
+```powershell
+# Terminal 1 — Backend
+cd backend
+npm run dev
+
+# Terminal 2 — Frontend
+cd frontend
+$env:NODE_OPTIONS="--openssl-legacy-provider"
+npm start
+```
+
+---
+
+## New Demo Credentials
+
+| Role     | Email                            | Password     |
+|----------|----------------------------------|--------------|
+| Admin    | admin@pillar5group.co.za         | pillar52025  |
+| Employee | s.mthembu@pillar5group.co.za     | demo123      |
+| Employee | j.vdberg@pillar5group.co.za      | demo123      |
+| Employee | n.dlamini@pillar5group.co.za     | demo123      |
