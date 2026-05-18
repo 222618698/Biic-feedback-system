@@ -19,7 +19,6 @@ exports.register = async (req, res) => {
       return res.status(400).json({ success: false, message: 'All required fields must be provided.' });
     }
 
-    // Enforce Pillar 5 Group email domain
     if (!email.toLowerCase().endsWith('@pillar5group.co.za')) {
       return res.status(400).json({ success: false, message: 'You must use a @pillar5group.co.za email address to register.' });
     }
@@ -48,9 +47,9 @@ exports.register = async (req, res) => {
     const newUser = { id: result.insertId, email: email.toLowerCase(), role: 'user' };
 
     res.status(201).json({
-      success: true,
-      message: 'Account created successfully.',
-      token:   signToken(newUser),
+      success:  true,
+      message:  'Account created successfully.',
+      token:    signToken(newUser),
       user: {
         id:           result.insertId,
         firstName:    firstName.trim(),
@@ -71,6 +70,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'Email and password are required.' });
     }
@@ -90,6 +90,7 @@ exports.login = async (req, res) => {
 
     const user  = rows[0];
     const valid = await bcrypt.compare(password, user.password_hash);
+
     if (!valid) {
       return res.status(401).json({ success: false, message: 'Incorrect email or password.' });
     }
@@ -103,9 +104,9 @@ exports.login = async (req, res) => {
         lastName:     user.last_name,
         email:        user.email,
         role:         user.role,
-        empNumber:    user.emp_number,
+        empNumber:    user.emp_number  || '',
         departmentId: user.department_id,
-        department:   user.dept_name,
+        department:   user.dept_name   || '',
       },
     });
   } catch (err) {
@@ -126,16 +127,22 @@ exports.getMe = async (req, res) => {
       [req.user.id]
     );
     if (!rows.length) return res.status(404).json({ success: false, message: 'User not found.' });
+
     const u = rows[0];
     res.json({
       success: true,
       user: {
-        id: u.id, firstName: u.first_name, lastName: u.last_name,
-        email: u.email, role: u.role, empNumber: u.emp_number,
-        department: u.dept_name, createdAt: u.created_at,
+        id:         u.id,
+        firstName:  u.first_name,
+        lastName:   u.last_name,
+        email:      u.email,
+        role:       u.role,
+        empNumber:  u.emp_number || '',
+        department: u.dept_name  || '',
+        createdAt:  u.created_at,
       },
     });
-  } catch {
+  } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 };

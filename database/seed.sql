@@ -2,7 +2,7 @@
 --  Pillar 5 Group — Seed Data
 --  Run AFTER schema.sql
 -- ============================================================
-USE p5_feedback;
+USE biic_feedback;
 
 -- ── Departments ──────────────────────────────────────────────
 INSERT IGNORE INTO departments (dept_name) VALUES
@@ -36,11 +36,11 @@ VALUES
 INSERT IGNORE INTO feedback (reference_num, type, category_id, message, status, user_id)
 VALUES
   ('P5-DEMO-001', 'complaint',   3,
-   'The air conditioning in the open-plan office has been broken for two weeks. Very uncomfortable in afternoons.',
+   'The air conditioning in the open-plan office has been broken for two weeks.',
    'in review', 2),
   ('P5-DEMO-002', 'compliment',  1,
-   'Our team lead handled the recent deadline extension excellently. Communication was clear and empathetic.',
+   'Our team lead handled the recent deadline extension excellently.',
    'resolved', 3),
   ('P5-DEMO-003', 'complaint',   4,
-   'VPN connectivity has been unstable for remote workers all month. Constant disconnections during video calls.',
+   'VPN connectivity has been unstable for remote workers all month.',
    'new', 4);

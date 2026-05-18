@@ -3,8 +3,8 @@
 --  Run in MySQL Workbench: SOURCE schema.sql;
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS p5_feedback CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE p5_feedback;
+CREATE DATABASE IF NOT EXISTS biic_feedback CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE biic_feedback;
 
 -- ── 1. Departments ───────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS departments (
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
   last_name     VARCHAR(80)  NOT NULL,
   email         VARCHAR(150) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
-  emp_number    VARCHAR(50)  NULL,          -- employee / contract number
+  emp_number    VARCHAR(50)  NULL,
   department_id INT          NULL,
   role          ENUM('user','admin') NOT NULL DEFAULT 'user',
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -53,14 +53,13 @@ CREATE TABLE IF NOT EXISTS feedback (
 );
 
 -- ── 5. Proof Files ───────────────────────────────────────────
--- Stores file metadata; actual file saved to disk via multer
 CREATE TABLE IF NOT EXISTS proof_files (
   id          INT AUTO_INCREMENT PRIMARY KEY,
   feedback_id INT NOT NULL,
   file_name   VARCHAR(255) NOT NULL,
-  file_path   VARCHAR(500) NOT NULL,   -- server path: uploads/proofs/<uuid>_filename
+  file_path   VARCHAR(500) NOT NULL,
   mime_type   VARCHAR(100) NOT NULL,
-  file_size   INT          NOT NULL,   -- bytes
+  file_size   INT          NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_proof_feedback FOREIGN KEY (feedback_id)
     REFERENCES feedback(id) ON DELETE CASCADE
