@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import { feedbackAPI } from '../services/api';
+import Logo from '../components/Logo';
 
 const initials = (u) => `${u.firstName?.[0]||''}${u.lastName?.[0]||''}`.toUpperCase();
 
@@ -108,7 +109,7 @@ export default function SubmitPage() {
 
       <header className="site-header">
         <div className="logo" onClick={() => navigate('/')}>
-          <div className="logo-mark" style={{ fontSize:13, fontWeight:700 }}>P5</div>
+          <div className="logo-mark"><Logo variant="mark" /></div>
           <div>
             <span className="logo-text">Pillar<span>5</span> Group</span>
             <span className="logo-sub">Above Average</span>

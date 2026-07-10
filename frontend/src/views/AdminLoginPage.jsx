@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
+import Logo from '../components/Logo';
 
 export default function AdminLoginPage() {
   const { login } = useAuth();
@@ -33,17 +34,7 @@ export default function AdminLoginPage() {
     <div className="auth-wrap">
       <div className="auth-card">
         <div className="auth-top">
-          {/* Pillar 5 SVG logo mark */}
-          <div className="logo-mark" style={{ width: 52, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox="0 0 40 40" fill="white" width={32} height={32}>
-              <rect x="4" y="32" width="32" height="3" rx="1.5" fill="currentColor"/>
-              <rect x="4" y="5"  width="32" height="3" rx="1.5" fill="currentColor"/>
-              <rect x="7"  y="10" width="4" height="20" rx="2" fill="currentColor"/>
-              <rect x="14" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-              <rect x="22" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-              <rect x="29" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-            </svg>
-          </div>
+          <div className="logo-mark"><Logo variant="mark" /></div>
           <h2>Admin Access</h2>
           <p>Authorised Pillar 5 Group staff only</p>
         </div>

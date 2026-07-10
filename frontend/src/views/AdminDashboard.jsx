@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import { adminAPI } from '../services/api';
+import Logo from '../components/Logo';
 
 const initials = (name = '') =>
   name.split(' ').map((w) => w[0] || '').join('').toUpperCase().slice(0, 2);
@@ -337,16 +338,7 @@ export default function AdminDashboard() {
       {/* HEADER */}
       <header className="site-header">
         <div className="logo" onClick={() => navigate('/')}>
-          <div className="logo-mark" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox="0 0 40 40" fill="white" width={22} height={22}>
-              <rect x="4"  y="32" width="32" height="3" rx="1.5" fill="currentColor"/>
-              <rect x="4"  y="5"  width="32" height="3" rx="1.5" fill="currentColor"/>
-              <rect x="7"  y="10" width="4"  height="20" rx="2" fill="currentColor"/>
-              <rect x="14" y="10" width="4"  height="20" rx="2" fill="currentColor"/>
-              <rect x="22" y="10" width="4"  height="20" rx="2" fill="currentColor"/>
-              <rect x="29" y="10" width="4"  height="20" rx="2" fill="currentColor"/>
-            </svg>
-          </div>
+          <div className="logo-mark"><Logo variant="mark" /></div>
           <div>
             <span className="logo-text">Pillar<span>5</span> <span style={{ color: 'var(--gold)' }}>Admin</span></span>
             <span className="logo-sub">Above Average</span>
@@ -361,7 +353,10 @@ export default function AdminDashboard() {
 
         {/* SIDEBAR */}
         <aside className="admin-sidebar">
-          <div className="sidebar-logo"><span>Dashboard</span></div>
+          <div className="sidebar-logo">
+            <div className="logo-mark"><Logo variant="mark" /></div>
+            <span>Dashboard</span>
+          </div>
           <div className="sidebar-section">Submissions</div>
           {sidebarItems.map((item, i) => {
             if (!item) return (

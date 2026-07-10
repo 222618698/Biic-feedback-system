@@ -1,6 +1,7 @@
 // frontend/src/views/LandingPage.jsx
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -11,19 +12,6 @@ export default function LandingPage() {
     const onScroll = () => nav?.classList.toggle('scrolled', window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Particles
-  useEffect(() => {
-    const c = document.getElementById('lp-particles');
-    if (!c) return;
-    for (let i = 0; i < 28; i++) {
-      const p = document.createElement('div');
-      p.className = 'lp-particle';
-      p.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${Math.random() * 4}s;animation-duration:${3 + Math.random() * 4}s;opacity:0;`;
-      c.appendChild(p);
-    }
-    return () => { c.innerHTML = ''; };
   }, []);
 
   // Typewriter
@@ -89,16 +77,9 @@ export default function LandingPage() {
     return () => obs.disconnect();
   }, []);
 
-  const PillarIcon = ({ style = {}, svgStyle = {} }) => (
+  const PillarIcon = ({ style = {} }) => (
     <div className="lp-logo-mark" style={style}>
-      <svg className="lp-logo-pillar-svg" viewBox="0 0 40 40" fill="white" style={svgStyle}>
-        <rect x="4" y="32" width="32" height="3" rx="1.5" fill="currentColor"/>
-        <rect x="4" y="5" width="32" height="3" rx="1.5" fill="currentColor"/>
-        <rect x="7" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-        <rect x="14" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-        <rect x="22" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-        <rect x="29" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-      </svg>
+      <Logo variant="mark" />
     </div>
   );
 
@@ -108,7 +89,7 @@ export default function LandingPage() {
       {/* NAV */}
       <nav className="lp-nav" id="lp-nav">
         <div className="lp-logo" onClick={() => navigate('/')}>
-          <PillarIcon style={{ width: 42, height: 42 }} svgStyle={{ width: 28, height: 28 }} />
+          <PillarIcon />
           <div>
             <span className="lp-logo-text">Pillar<span>5</span> Group</span>
             <span className="lp-logo-sub">Above Average</span>
@@ -124,11 +105,9 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section className="lp-hero">
-        <div className="lp-grid" />
         <div className="lp-orb lp-orb-1" />
         <div className="lp-orb lp-orb-2" />
         <div className="lp-orb lp-orb-3" />
-        <div className="lp-particles" id="lp-particles" />
 
         <div className="lp-hero-inner">
           <div className="lp-hero-badge">
@@ -138,20 +117,8 @@ export default function LandingPage() {
 
           {/* Big logo in hero */}
           <div className="lp-hero-logo-big">
-            <div className="lp-hero-logo-mark">
-              <svg viewBox="0 0 40 40" fill="white" style={{ width: 42, height: 42 }}>
-                <rect x="4" y="32" width="32" height="3" rx="1.5" fill="currentColor"/>
-                <rect x="4" y="5" width="32" height="3" rx="1.5" fill="currentColor"/>
-                <rect x="7" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="14" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="22" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="29" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-              </svg>
-            </div>
-            <div className="lp-hero-logo-words">
-              <div className="lp-hero-logo-name">Pillar<span>5</span> Group</div>
-              <div className="lp-hero-logo-tagline">Above Average</div>
-            </div>
+            <div className="lp-hero-logo-glow" />
+            <Logo variant="full" className="lp-hero-logo-full" />
           </div>
 
           <h1 className="lp-hero-h1">
@@ -346,15 +313,8 @@ export default function LandingPage() {
       <footer className="lp-footer">
         <div>
           <div className="lp-logo" style={{ marginBottom: 8 }}>
-            <div className="lp-logo-mark" style={{ width: 30, height: 30 }}>
-              <svg viewBox="0 0 40 40" fill="white" style={{ width: 18, height: 18 }}>
-                <rect x="4" y="32" width="32" height="3" rx="1.5" fill="currentColor"/>
-                <rect x="4" y="5" width="32" height="3" rx="1.5" fill="currentColor"/>
-                <rect x="7" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="14" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="22" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-                <rect x="29" y="10" width="4" height="20" rx="2" fill="currentColor"/>
-              </svg>
+            <div className="lp-logo-mark" style={{ width: 34, height: 34 }}>
+              <Logo variant="mark" />
             </div>
             <div>
               <span className="lp-logo-text" style={{ fontSize: 15 }}>Pillar<span>5</span> Group</span>

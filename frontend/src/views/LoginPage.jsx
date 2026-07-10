@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
+import Logo from '../components/Logo';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -31,9 +32,9 @@ export default function LoginPage() {
     <div className="auth-wrap">
       <div className="auth-card">
         <div className="auth-top">
-          <div className="logo-mark">B</div>
+          <div className="logo-mark"><Logo variant="mark" /></div>
           <h2>Employee Sign In</h2>
-          <p>Access the BIIC Feedback Portal</p>
+          <p>Access the Pillar 5 Group Feedback Portal</p>
         </div>
         <div className="auth-body">
           {error && <div className="form-error">{error}</div>}
@@ -41,7 +42,7 @@ export default function LoginPage() {
             <div className="field">
               <label>Email Address</label>
               <input name="email" type="email" value={form.email}
-                onChange={handleChange} placeholder="you@biic.co.za" required />
+                onChange={handleChange} placeholder="you@pillar5group.co.za" required />
             </div>
             <div className="field">
               <label>Password</label>

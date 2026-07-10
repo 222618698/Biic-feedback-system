@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
 import { feedbackAPI } from '../services/api';
+import Logo from '../components/Logo';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -50,7 +51,7 @@ export default function RegisterPage() {
     <div className="auth-wrap">
       <div className="auth-card">
         <div className="auth-top">
-          <div className="logo-mark">P5</div>
+          <div className="logo-mark"><Logo variant="mark" /></div>
           <h2>Create Account</h2>
           <p>Register to submit feedback to Pillar 5 Group</p>
         </div>
